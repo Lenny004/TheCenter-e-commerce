@@ -17,7 +17,7 @@ TheCenter-e-commerce/
 │   ├── app.py
 │   ├── models.py
 │   ├── requirements.txt
-│   └── .env
+│   └── .env.example   (copiar a .env y configurar)
 ├── frontend/         # React + Vite
 │   ├── src/
 │   │   ├── components/
@@ -27,6 +27,11 @@ TheCenter-e-commerce/
 │   └── package.json
 └── README.md
 ```
+
+## Configuración
+
+- **Backend:** En `backend/` copia `.env.example` a `.env` y ajusta valores (no commitear `.env`).
+- **Frontend:** Opcionalmente crea `frontend/.env` con `VITE_API_URL=http://localhost:5000` si el backend no corre en ese host/puerto.
 
 ## Instalación y ejecución
 

@@ -1,0 +1,13 @@
+---
+description: Estándares del frontend React (Vite, JavaScript)
+globs: frontend/src/**/*.jsx
+alwaysApply: false
+---
+
+# Frontend React - The Center
+
+- **React con Vite.** JavaScript (sin TypeScript). Componentes funcionales y hooks.
+- **Rutas:** React Router. Rutas en `App.jsx`; páginas en `src/pages/`, componentes reutilizables en `src/components/`.
+- **API:** Usar el cliente en `src/api.js` (Axios). Añadir interceptor para `Authorization: Bearer <token>` cuando haya usuario logueado.
+- **Estado de auth:** Contexto (ej. AuthContext) para user/token, login, register, logout. Persistir token en localStorage; no guardar contraseñas.
+- **CSS:** Variables y reset en `index.css`. Un archivo `.css` por página o componente (ej. `Login.css` importado en `Login.jsx`). Clases con prefijo: `.layout-*`, `.page-*`, `.auth-form`, etc. Sin Tailwind por defecto.

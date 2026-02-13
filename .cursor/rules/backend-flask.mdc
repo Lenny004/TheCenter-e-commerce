@@ -1,0 +1,14 @@
+---
+description: Estándares del backend Flask (Python)
+globs: backend/**/*.py
+alwaysApply: false
+---
+
+# Backend Flask - The Center
+
+- **Python 3.10+.** Usar sintaxis y tipos compatibles.
+- **Base de datos:** SQLAlchemy con SQLite en desarrollo. Modelos en `models.py`; instancia `db` en `extensions.py` para evitar import circular.
+- **Rutas API:** Prefijo `/api/`. Respuestas JSON con `jsonify()`. Códigos HTTP correctos (201 creado, 400 validación, 401 no autorizado, 404 no encontrado).
+- **Contraseñas:** Nunca en texto plano. Usar `werkzeug.security.generate_password_hash` y `check_password_hash`.
+- **Autenticación:** JWT con secret en variable de entorno. Incluir en respuestas de login/register; validar en rutas protegidas.
+- **Validación:** Validar entrada (email, longitud) antes de crear usuario o producto. Devolver mensajes de error claros en español en el JSON.

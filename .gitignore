@@ -1,0 +1,40 @@
+# Entorno
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python / Backend
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs y temporales
+*.log
+.cache/
+tmp/
+temp/
