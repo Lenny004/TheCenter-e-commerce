@@ -351,6 +351,7 @@
 .login-footer {
   margin-top: 3rem;
   text-align: center;
+  text-decoration: underline;
 }
 
 .login-help {

@@ -27,71 +27,42 @@ function Login() {
           <div className="login-logo" aria-hidden>
             <div className="login-logo-inner" />
           </div>
-          <h1 className="login-title">Sign in or create account</h1>
+          <h1 className="login-title">Inicia sesión o crea una cuenta</h1>
         </div>
 
-        {/* Legal Banner */}
+        {/* Aviso legal */}
         <div className="login-legal">
           <p>
-            By continuing, you agree to our{' '}
-            <a href="#terms">Terms of Use</a> and{' '}
-            <a href="#privacy">Privacy Policy</a>.
+            Al continuar, aceptas nuestros{' '}
+            <a href="#terms">Términos de uso</a> y nuestra{' '}
+            <a href="#privacy">Política de privacidad</a>.
           </p>
         </div>
 
-        {/* Login Form */}
+        {/* Formulario de login */}
         <div className="login-form">
           <div className="login-field">
             <label htmlFor="login-email" className="sr-only">
-              Email or mobile phone
+              Correo o teléfono
             </label>
             <input
               id="login-email"
               type="text"
               className="login-input"
-              placeholder="Email or mobile phone"
+              placeholder="Correo o teléfono"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
             />
           </div>
           <button type="button" className="login-btn-primary">
-            Continue
+            Continuar
           </button>
         </div>
-
-        {/* Separator */}
-        <div className="login-separator">
-          <span className="login-separator-text">or</span>
-        </div>
-
-        {/* Passkey */}
-        <button type="button" className="login-btn-passkey">
-          <span className="material-symbols-outlined">fingerprint</span>
-          Sign in with passkey
-        </button>
-
-        {/* Keep me signed in */}
-        <div className="login-keep">
-          <label className="login-checkbox-label">
-            <span className="login-checkbox-wrap">
-              <input
-                type="checkbox"
-                className="login-checkbox"
-                checked={keepSignedIn}
-                onChange={(e) => setKeepSignedIn(e.target.checked)}
-              />
-              <span className="login-checkbox-box" aria-hidden />
-              <span className="material-symbols-outlined login-checkbox-icon">check</span>
-            </span>
-            <span className="login-checkbox-text">Keep me signed in</span>
-          </label>
-        </div>
-
-        {/* Footer help */}
+        {/* Registrate */}
         <div className="login-footer">
           <button type="button" className="login-help">
-            Need help signing in?
+            <u>Crea una cuenta</u>
           </button>
         </div>
       </div>
