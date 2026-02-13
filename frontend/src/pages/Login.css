@@ -1,0 +1,369 @@
+/* Iconos Material (fuente cargada desde index.html) */
+.login-page .material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-size: 1.5rem;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Variables (equivalente al tailwind.config del HTML) */
+.login-page {
+  --login-primary: #f20d0d;
+  --login-primary-hover: #b30909;
+  --login-bg: #f8f5f5;
+  --login-card-bg: #fff;
+  --login-border: #e6dbdb;
+  --login-text: #181111;
+  --login-text-muted: #8a6060;
+}
+
+.login-page {
+  min-height: max(884px, 100dvh);
+  min-height: 100vh;
+  background: var(--login-bg);
+  font-family: 'Inter', -apple-system, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 28rem;
+  background: var(--login-card-bg);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+}
+
+@media (min-width: 768px) {
+  .login-card {
+    padding: 3rem;
+  }
+}
+
+/* Top bar / Back */
+.login-topbar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  margin-top: -1rem;
+  margin-left: -1rem;
+}
+
+.login-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  color: var(--login-primary);
+  background: transparent;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-back:hover {
+  background: rgba(242, 13, 13, 0.1);
+}
+
+.login-back .material-symbols-outlined {
+  font-size: 1.5rem;
+}
+
+/* Brand */
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.login-logo {
+  width: 5rem;
+  height: 5rem;
+  background: rgba(242, 13, 13, 0.1);
+  border: 2px solid rgba(242, 13, 13, 0.2);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.login-logo-inner {
+  width: 100%;
+  height: 100%;
+  background: var(--login-primary) center/cover;
+  opacity: 0.9;
+}
+
+.login-title {
+  color: var(--login-text);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin: 0;
+}
+
+/* Legal */
+.login-legal {
+  margin-bottom: 2rem;
+}
+
+.login-legal p {
+  color: var(--login-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+}
+
+.login-legal a {
+  color: var(--login-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-legal a:hover {
+  text-decoration: underline;
+}
+
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-field {
+  position: relative;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.login-input {
+  width: 100%;
+  height: 3.5rem;
+  padding: 0 1.5rem;
+  border: 1px solid var(--login-border);
+  border-radius: 9999px;
+  background: var(--login-card-bg);
+  color: var(--login-text);
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-input::placeholder {
+  color: var(--login-text-muted);
+}
+
+.login-input:hover {
+  border-color: var(--login-text-muted);
+}
+
+.login-input:focus {
+  border-color: var(--login-primary);
+  box-shadow: 0 0 0 2px rgba(242, 13, 13, 0.25);
+}
+
+/* Primary button */
+.login-btn-primary {
+  width: 100%;
+  height: 3.5rem;
+  background: var(--login-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: inherit;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(242, 13, 13, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.login-btn-primary:hover {
+  background: var(--login-primary-hover);
+}
+
+.login-btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Separator */
+.login-separator {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.login-separator::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--login-border);
+}
+
+.login-separator-text {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--login-text-muted);
+  background: var(--login-card-bg);
+}
+
+/* Passkey button */
+.login-btn-passkey {
+  width: 100%;
+  height: 3.5rem;
+  border: 2px solid var(--login-border);
+  background: transparent;
+  color: var(--login-text);
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: inherit;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+  margin-bottom: 1.5rem;
+}
+
+.login-btn-passkey:hover {
+  background: rgba(242, 13, 13, 0.05);
+}
+
+.login-btn-passkey .material-symbols-outlined {
+  color: var(--login-primary);
+  font-size: 1.25rem;
+}
+
+/* Keep me signed in */
+.login-keep {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.login-checkbox {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.login-checkbox-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-checkbox-box {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--login-border);
+  border-radius: 9999px;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.login-checkbox:focus-visible + .login-checkbox-box {
+  outline: 2px solid var(--login-primary);
+  outline-offset: 2px;
+}
+
+.login-checkbox:checked + .login-checkbox-box {
+  background: var(--login-primary);
+  border-color: var(--login-primary);
+}
+
+.login-checkbox-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: #fff;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.login-checkbox:checked ~ .login-checkbox-icon {
+  opacity: 1;
+  transform: scale(0.75);
+}
+
+.login-checkbox-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--login-text);
+  user-select: none;
+}
+
+.login-checkbox-label:hover .login-checkbox-text {
+  color: var(--login-primary);
+}
+
+/* Footer help */
+.login-footer {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.login-help {
+  background: none;
+  border: none;
+  color: var(--login-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.login-help:hover {
+  color: var(--login-primary);
+}

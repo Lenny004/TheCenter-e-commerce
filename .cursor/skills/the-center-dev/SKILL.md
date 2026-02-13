@@ -7,7 +7,7 @@ description: Guía de desarrollo para el proyecto The Center (e-commerce Flask +
 
 ## Stack
 
-- **Backend:** Flask, SQLAlchemy, SQLite, CORS. Puerto 5000.
+- **Backend:** Flask, SQLAlchemy, PostgreSQL, CORS. Puerto 5000.
 - **Frontend:** React (Vite), React Router, Axios. Puerto 5173. CSS plano (sin Tailwind).
 
 ## Estructura clave

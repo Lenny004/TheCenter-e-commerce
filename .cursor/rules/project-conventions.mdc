@@ -6,6 +6,6 @@ alwaysApply: true
 # The Center - Convenciones del proyecto
 
 - **Idioma:** Comentarios, commits y documentación en **español**. Código (nombres de variables, funciones, endpoints) en **inglés**.
-- **Estructura:** Backend en `backend/` (Flask + SQLite), frontend en `frontend/` (React + Vite). No mezclar código de uno en el otro.
+- **Estructura:** Backend en `backend/` (Flask + PostgreSQL), frontend en `frontend/` (React + Vite). No mezclar código de uno en el otro.
 - **Variables de entorno:** Nunca commitear `.env`. Usar `.env.example` como plantilla y documentar en README. Backend: `backend/.env`; frontend: `frontend/.env` (Vite usa prefijo `VITE_`).
 - **Secretos:** No hardcodear claves, JWT_SECRET ni URLs con credenciales. Leer siempre desde variables de entorno.

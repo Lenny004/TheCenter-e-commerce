@@ -1,10 +1,10 @@
 # The Center
 
-E-commerce de prendas de vestir. Estructura mínima con backend Flask (SQLite) y frontend React (Vite).
+E-commerce de prendas de vestir. Estructura mínima con backend Flask (PostgreSQL) y frontend React (Vite).
 
 ## Requisitos
 
-- **Backend:** Python 3.10+
+- **Backend:** Python 3.10+, PostgreSQL
 - **Frontend:** Node.js 18+ y npm
 
 ## Estructura del proyecto
@@ -13,7 +13,7 @@ Ruta del proyecto: `C:\Users\Adria\Documents\TheCenter-e-commerce`
 
 ```
 TheCenter-e-commerce/
-├── backend/          # Flask + SQLite
+├── backend/          # Flask + PostgreSQL
 │   ├── app.py
 │   ├── models.py
 │   ├── requirements.txt
@@ -30,7 +30,7 @@ TheCenter-e-commerce/
 
 ## Configuración
 
-- **Backend:** En `backend/` copia `.env.example` a `.env` y ajusta valores (no commitear `.env`).
+- **Backend:** En `backend/` copia `.env.example` a `.env` y configura `DATABASE_URI` con tu conexión PostgreSQL (`postgresql://usuario:contraseña@host:5432/nombre_bd`). Crea la base de datos en PostgreSQL antes de arrancar (ej: `CREATE DATABASE the_center;`). No commitear `.env`.
 - **Frontend:** Opcionalmente crea `frontend/.env` con `VITE_API_URL=http://localhost:5000` si el backend no corre en ese host/puerto.
 
 ## Instalación y ejecución

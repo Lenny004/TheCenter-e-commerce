@@ -1,5 +1,5 @@
 """
-The Center - Backend (Flask + SQLite).
+The Center - Backend (Flask + PostgreSQL).
 Servidor en http://localhost:5000
 """
 import os
@@ -14,11 +14,10 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# SQLite para desarrollo
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-    "DATABASE_URI",
-    "sqlite:///the_center.db"
-)
+# PostgreSQL (DATABASE_URI obligatorio en .env)
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URI")
+if not app.config["SQLALCHEMY_DATABASE_URI"]:
+    raise ValueError("Falta DATABASE_URI en .env (ej: postgresql://user:pass@localhost:5432/the_center)")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)

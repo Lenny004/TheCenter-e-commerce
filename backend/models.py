@@ -1,6 +1,6 @@
 """
 Modelos para The Center - e-commerce de prendas.
-SQLite + Flask-SQLAlchemy.
+PostgreSQL + Flask-SQLAlchemy.
 """
 from extensions import db
 
