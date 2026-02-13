@@ -1,0 +1,109 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background: #f5f5f5;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Layout */
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout-header {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.layout-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.layout-brand:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.layout-header nav a {
+  color: #e5e5e5;
+  margin-left: 1rem;
+}
+
+.layout-main {
+  flex: 1;
+  padding: 2rem 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.layout-footer {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: #666;
+  border-top: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+/* Pages */
+.page-home h1 {
+  margin-bottom: 0.5rem;
+}
+
+.page-home p {
+  margin-bottom: 1.5rem;
+  color: #444;
+}
+
+.backend-status {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.backend-status h2 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.health-response {
+  background: #f8f8f8;
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+
+.error {
+  color: #b91c1c;
+}
