@@ -166,28 +166,6 @@ function Dashboard() {
             <article key={p.id} className="dashboard-card">
               <div className="dashboard-card-image-wrap">
                 <img src={p.image} alt="" className="dashboard-card-image" />
-                <div className="dashboard-card-actions">
-                  <button
-                    type="button"
-                    className={`dashboard-fav-btn ${favorites[p.id] ? 'dashboard-fav-btn-active' : ''}`}
-                    onClick={() => toggleFavorite(p.id)}
-                    aria-label={favorites[p.id] ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-                  >
-                    <span className="material-symbols-outlined">favorite</span>
-                  </button>
-                </div>
-                <div className="dashboard-card-tag">
-                  <span className="material-symbols-outlined filled-icon">trending_up</span>
-                  {p.tag}
-                </div>
-                <div className="dashboard-card-dots">
-                  {Array.from({ length: p.dots }).map((_, i) => (
-                    <span
-                      key={i}
-                      className={`dashboard-dot ${i === 0 ? 'dashboard-dot-active' : ''}`}
-                    />
-                  ))}
-                </div>
               </div>
               <div className="dashboard-card-body">
                 <div className="dashboard-card-head">
@@ -198,11 +176,6 @@ function Dashboard() {
                   <div className="dashboard-rating">
                     <span className="material-symbols-outlined filled-icon">star</span>
                     <span>{p.rating}</span>
-                  </div>
-                  <div className="dashboard-colors">
-                    <span className="dashboard-color dashboard-color-primary" />
-                    <span className="dashboard-color" />
-                    <span className="dashboard-color" />
                   </div>
                 </div>
                 <div className="dashboard-card-prices">
