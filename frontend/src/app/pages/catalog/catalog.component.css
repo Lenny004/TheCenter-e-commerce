@@ -1,0 +1,30 @@
+/* Página de Catálogo — Estilos */
+
+.catalog {
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.catalog h1 {
+  margin-bottom: var(--spacing-xl);
+}
+
+.catalog__filters {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+@media (max-width: 768px) {
+  .catalog__grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--spacing-md);
+  }
+}

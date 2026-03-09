@@ -1,0 +1,38 @@
+/* Detalle de Producto — Estilos */
+
+.product-detail {
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+  align-items: start;
+}
+
+.product-detail__image {
+  background: var(--color-gray-100);
+  border-radius: var(--radius-lg);
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-detail__info h1 {
+  margin-bottom: var(--spacing-md);
+}
+
+.product-detail__price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  .product-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .product-detail__image {
+    min-height: 250px;
+  }
+}

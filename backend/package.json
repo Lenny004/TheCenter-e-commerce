@@ -1,0 +1,33 @@
+{
+  "name": "the-center-backend",
+  "version": "1.0.0",
+  "description": "The Center — API REST para plataforma e-commerce de ropa (Node.js + Express + Prisma + PostgreSQL)",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "node --watch src/app.js",
+    "start": "NODE_ENV=production node src/app.js",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:studio": "npx prisma studio",
+    "prisma:seed": "node prisma/seed.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "express-rate-limit": "^7.4.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

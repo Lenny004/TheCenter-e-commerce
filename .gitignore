@@ -1,40 +1,85 @@
-# Entorno
+# ============================================================================
+# The Center — .gitignore
+# Node.js + Angular + Prisma + PostgreSQL
+# ============================================================================
+
+# ── Dependencias ──────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Variables de entorno ──────────────────────────────────────────────────────
 .env
 .env.local
+.env.development
+.env.production
 .env.*.local
-*.env
 
-# Python / Backend
-backend/venv/
-backend/__pycache__/
-backend/**/__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.Python
-backend/*.db
-backend/*.sqlite
-backend/*.sqlite3
+# ── Build / Distribución ─────────────────────────────────────────────────────
+dist/
+build/
+out/
+*.tgz
 
-# Node / Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.vite/
+# ── Angular ───────────────────────────────────────────────────────────────────
+.angular/
+.angular/cache/
+.sass-cache/
+tmp/
+connect.lock
+
+# ── Prisma ────────────────────────────────────────────────────────────────────
+prisma/migrations/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
-# IDE / OS
-.idea/
+# ── IDEs y Editores ──────────────────────────────────────────────────────────
 .vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
 *.swp
 *.swo
+*~
+.project
+.classpath
+.settings/
+
+# ── Sistema Operativo ────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
-# Logs y temporales
-*.log
-.cache/
-tmp/
-temp/
+# ── Testing ───────────────────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Python (legacy) ──────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+instance/
+*.db
+*.sqlite3
+
+# ── Cursor/AI ─────────────────────────────────────────────────────────────────
+.cursor/
+
+# ── Misc ──────────────────────────────────────────────────────────────────────
+*.tsbuildinfo
+package-lock.json

@@ -1,0 +1,32 @@
+<!-- Página de Registro -->
+<section class="register">
+  <div class="register__card">
+    <h1>Crear Cuenta</h1>
+    <p>Regístrate para empezar a comprar en The Center.</p>
+
+    <!-- TODO: Implementar formulario reactivo -->
+    <form class="register__form">
+      <div class="form-group">
+        <label for="name">Nombre completo</label>
+        <input type="text" id="name" placeholder="Tu nombre" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" placeholder="tu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Teléfono (opcional)</label>
+        <input type="tel" id="phone" placeholder="+503 0000-0000">
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" placeholder="Mínimo 8 caracteres" required>
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">Crear cuenta</button>
+    </form>
+
+    <p class="register__login">
+      ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+    </p>
+  </div>
+</section>

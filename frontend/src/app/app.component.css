@@ -1,0 +1,102 @@
+/* ============================================================================
+   The Center — Estilos del componente raíz (layout)
+   ============================================================================ */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Header ───────────────────────────────────────────────────── */
+
+.header {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: var(--spacing-md) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-white);
+  letter-spacing: -0.5px;
+}
+
+.header__logo:hover {
+  color: var(--color-gray-200);
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.header__nav a {
+  color: var(--color-gray-300);
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color var(--transition-fast);
+}
+
+.header__nav a:hover,
+.header__nav a.active {
+  color: var(--color-white);
+}
+
+/* ── Main ─────────────────────────────────────────────────────── */
+
+.main {
+  flex: 1;
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+
+.footer {
+  background-color: var(--color-gray-800);
+  color: var(--color-gray-400);
+  padding: var(--spacing-lg) 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.footer p {
+  color: var(--color-gray-400);
+  margin: 0;
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .header__nav {
+    gap: var(--spacing-md);
+  }
+
+  .header__nav a {
+    font-size: 0.8rem;
+  }
+
+  .header__logo {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header__container {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}

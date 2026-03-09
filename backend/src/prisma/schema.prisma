@@ -1,0 +1,136 @@
+// ============================================================================
+// The Center — Cliente Prisma (Singleton)
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Enumeraciones ───────────────────────────────────────────────────────────
+
+enum UserRole {
+  vendedor
+  cliente
+  admin
+}
+
+enum GenderType {
+  masculino
+  femenino
+  unisex
+}
+
+enum OrderStatus {
+  cancelada
+  procesando
+  pendiente
+  enviada
+  entregada
+}
+
+// ── Modelos ─────────────────────────────────────────────────────────────────
+
+/// Categorías de productos (ej: camisetas, pantalones, vestidos)
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(100)
+  products Product[]
+
+  @@map("category")
+}
+
+/// Tallas disponibles (ej: XS, S, M, L, XL, XXL)
+model Size {
+  id    Int     @id @default(autoincrement())
+  size  String  @db.VarChar(50)
+  stock Stock[]
+
+  @@map("size")
+}
+
+/// Usuarios del sistema (clientes, vendedores, administradores)
+model User {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(100)
+  phone        String?        @db.VarChar(20)
+  password     String         @db.VarChar(255)
+  email        String         @unique @db.VarChar(150)
+  rol          UserRole
+  products     Product[]      @relation("SellerProducts")
+  shoppingCart ShoppingCart[]
+  orders       Order[]
+
+  @@map("user")
+}
+
+/// Productos del catálogo
+model Product {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(150)
+  price        Decimal        @db.Decimal(10, 2)
+  gender       GenderType?
+  image        String?        @db.Text
+  categoryId   Int            @map("category_id")
+  sellerId     Int            @map("seller_id")
+  category     Category       @relation(fields: [categoryId], references: [id])
+  seller       User           @relation("SellerProducts", fields: [sellerId], references: [id])
+  stock        Stock[]
+  shoppingCart ShoppingCart[]
+  orderDetail  OrderDetail[]
+
+  @@map("product")
+}
+
+/// Stock por producto y talla
+model Stock {
+  id        Int     @id @default(autoincrement())
+  productId Int     @map("product_id")
+  sizeId    Int     @map("size_id")
+  quantity  Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id])
+  size      Size    @relation(fields: [sizeId], references: [id])
+
+  @@map("stock")
+}
+
+/// Carrito de compras por usuario
+model ShoppingCart {
+  id        Int     @id @default(autoincrement())
+  userId    Int     @map("user_id")
+  productId Int     @map("product_id")
+  quantity  Int
+  user      User    @relation(fields: [userId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("shopping_cart")
+}
+
+/// Órdenes de compra
+model Order {
+  id      Int           @id @default(autoincrement())
+  userId  Int           @map("user_id")
+  total   Decimal       @db.Decimal(10, 2)
+  status  OrderStatus   @default(pendiente)
+  user    User          @relation(fields: [userId], references: [id])
+  details OrderDetail[]
+
+  @@map("order")
+}
+
+/// Detalle de cada orden (productos, cantidades, precios unitarios)
+model OrderDetail {
+  id        Int     @id @default(autoincrement())
+  orderId   Int     @map("order_id")
+  productId Int     @map("product_id")
+  quantity  Int
+  unitPrice Decimal @map("unit_price") @db.Decimal(10, 2)
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("order_detail")
+}

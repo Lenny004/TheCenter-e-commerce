@@ -1,0 +1,34 @@
+/* Admin Products — Estilos */
+
+.admin-products {
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.admin-products__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+}
+
+.admin-products__header .btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.admin-products__table {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .admin-products__header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: stretch;
+  }
+}
