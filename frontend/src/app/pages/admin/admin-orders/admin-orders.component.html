@@ -1,9 +1,76 @@
-<!-- Gestión de Pedidos (Admin) -->
 <section class="admin-orders container">
   <h1>Gestión de Pedidos</h1>
 
-  <!-- TODO: Tabla de pedidos con estado y acciones -->
-  <div class="admin-orders__table">
-    <p>Cargando pedidos...</p>
+  <div class="ao-table-wrap">
+    <table class="ao-table">
+      <thead>
+        <tr>
+          <th>Pedido</th>
+          <th>Cliente</th>
+          <th>Email</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders; track order.id) {
+          <tr>
+            <td><strong>#{{ order.id }}</strong></td>
+            <td>{{ order.user?.name || 'User #' + order.user_id }}</td>
+            <td>{{ order.user?.email || '—' }}</td>
+            <td>{{ order.total | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td>
+              <span class="ao-status" [class]="getStatusClass(order.status)">
+                {{ order.status | titlecase }}
+              </span>
+            </td>
+            <td>
+              <div class="ao-actions">
+                <select [ngModel]="order.status" (ngModelChange)="updateStatus(order, $event)" class="ao-select">
+                  @for (s of statuses; track s) {
+                    <option [value]="s">{{ s | titlecase }}</option>
+                  }
+                </select>
+                <button class="ao-icon-btn" title="Ver detalle" (click)="toggleDetails(order.id)">
+                  <span class="material-symbols-outlined">
+                    {{ expandedOrderId === order.id ? 'expand_less' : 'expand_more' }}
+                  </span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          @if (expandedOrderId === order.id && order.details) {
+            <tr class="ao-detail-row">
+              <td colspan="6">
+                <div class="ao-detail">
+                  <h4>Detalle del pedido #{{ order.id }}</h4>
+                  <table class="ao-detail-table">
+                    <thead>
+                      <tr>
+                        <th>Producto ID</th>
+                        <th>Cantidad</th>
+                        <th>Precio unitario</th>
+                        <th>Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (d of order.details; track d.id) {
+                        <tr>
+                          <td>{{ d.product_id }}</td>
+                          <td>{{ d.quantity }}</td>
+                          <td>{{ d.unit_price | currency:'USD':'symbol':'1.2-2' }}</td>
+                          <td>{{ d.quantity * d.unit_price | currency:'USD':'symbol':'1.2-2' }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
   </div>
 </section>

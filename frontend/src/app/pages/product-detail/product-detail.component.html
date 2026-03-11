@@ -1,13 +1,120 @@
-<!-- Página de Detalle de Producto -->
-<section class="product-detail container">
-  <!-- TODO: Cargar datos del producto dinámicamente -->
-  <div class="product-detail__image">
-    <!-- Imagen del producto -->
-  </div>
-  <div class="product-detail__info">
-    <h1>Nombre del producto</h1>
-    <p class="product-detail__price">$0.00</p>
-    <!-- Selector de talla -->
-    <!-- Botón agregar al carrito -->
-  </div>
+<section class="detail container">
+  <a routerLink="/" class="detail__back">
+    <span class="material-symbols-outlined">arrow_back</span>
+    Volver
+  </a>
+
+  @if (loaded) {
+    <div class="detail__layout">
+      <!-- Imagen del producto -->
+      <div class="detail__gallery">
+        <div class="detail__main-image">
+          @if (product.image) {
+            <img [src]="product.image" [alt]="product.name">
+          } @else {
+            <span class="material-symbols-outlined detail__no-image">image</span>
+          }
+        </div>
+      </div>
+
+      <!-- Información del producto -->
+      <div class="detail__info">
+        <div class="detail__badges">
+          @if (product.category) {
+            <span class="detail__badge">{{ product.category.name }}</span>
+          }
+          @if (product.gender) {
+            <span class="detail__badge detail__badge--gender">{{ product.gender | titlecase }}</span>
+          }
+        </div>
+
+        <h1 class="detail__name">{{ product.name }}</h1>
+
+        <div class="detail__pricing">
+          <span class="detail__price">{{ product.price | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+
+        @if (product.seller) {
+          <div class="detail__seller">
+            <span class="material-symbols-outlined">storefront</span>
+            Vendido por <strong>{{ product.seller.name }}</strong>
+          </div>
+        }
+
+        <!-- Selector de talla (desde tabla stock + size) -->
+        @if (availableSizes.length > 0) {
+          <div class="detail__section">
+            <h4 class="detail__section-title">Talla</h4>
+            <div class="detail__sizes">
+              @for (size of availableSizes; track size) {
+                <button
+                  class="detail__size"
+                  [class.detail__size--active]="selectedSize === size"
+                  (click)="selectedSize = size">
+                  {{ size }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Cantidad -->
+        <div class="detail__section">
+          <h4 class="detail__section-title">Cantidad</h4>
+          <div class="detail__quantity">
+            <button class="detail__qty-btn" (click)="decreaseQty()" [disabled]="quantity <= 1">
+              <span class="material-symbols-outlined">remove</span>
+            </button>
+            <span class="detail__qty-value">{{ quantity }}</span>
+            <button class="detail__qty-btn" (click)="increaseQty()">
+              <span class="material-symbols-outlined">add</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="detail__actions">
+          <button class="detail__add-btn" (click)="addToCart()">
+            <span class="material-symbols-outlined">shopping_cart</span>
+            Añadir al carrito
+          </button>
+          <button class="detail__wishlist-btn" (click)="toggleWishlist()">
+            <span class="material-symbols-outlined">{{ isFavorite ? 'favorite' : 'favorite_border' }}</span>
+          </button>
+        </div>
+
+        @if (addedToCart) {
+          <div class="detail__added-msg">
+            <span class="material-symbols-outlined">check_circle</span>
+            Producto añadido al carrito
+          </div>
+        }
+
+        <!-- Detalles adicionales -->
+        <div class="detail__extras">
+          <div class="detail__extra">
+            <span class="material-symbols-outlined">local_shipping</span>
+            <div>
+              <strong>Envío gratis</strong>
+              <p>En pedidos superiores a $50</p>
+            </div>
+          </div>
+          <div class="detail__extra">
+            <span class="material-symbols-outlined">cached</span>
+            <div>
+              <strong>Devolución gratuita</strong>
+              <p>30 días para devolver</p>
+            </div>
+          </div>
+          <div class="detail__extra">
+            <span class="material-symbols-outlined">verified_user</span>
+            <div>
+              <strong>Garantía</strong>
+              <p>2 años de garantía oficial</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 </section>

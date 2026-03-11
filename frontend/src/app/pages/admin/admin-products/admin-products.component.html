@@ -1,15 +1,103 @@
-<!-- Gestión de Productos (Admin) -->
 <section class="admin-products container">
   <div class="admin-products__header">
     <h1>Gestión de Productos</h1>
-    <button class="btn btn--primary">
+    <button class="ap-btn ap-btn--primary" (click)="openForm()">
       <span class="material-symbols-outlined">add</span>
       Nuevo Producto
     </button>
   </div>
 
-  <!-- TODO: Tabla de productos con acciones CRUD -->
-  <div class="admin-products__table">
-    <p>Cargando productos...</p>
+  <!-- Formulario de producto -->
+  @if (showForm) {
+    <div class="ap-form-card">
+      <h3>Nuevo Producto</h3>
+      <form class="ap-form" (ngSubmit)="saveProduct()">
+        <div class="ap-form__row">
+          <div class="ap-form__group">
+            <label>Nombre *</label>
+            <input type="text" [(ngModel)]="form.name" name="name" placeholder="Nombre del producto" required>
+          </div>
+          <div class="ap-form__group">
+            <label>Precio *</label>
+            <input type="number" [(ngModel)]="form.price" name="price" placeholder="0.00" step="0.01" required>
+          </div>
+        </div>
+        <div class="ap-form__row">
+          <div class="ap-form__group">
+            <label>Categoría *</label>
+            <select [(ngModel)]="form.category_id" name="category_id" required>
+              <option [ngValue]="0" disabled>Seleccionar categoría</option>
+              @for (cat of categories; track cat.id) {
+                <option [ngValue]="cat.id">{{ cat.name }}</option>
+              }
+            </select>
+          </div>
+          <div class="ap-form__group">
+            <label>Género</label>
+            <select [(ngModel)]="form.gender" name="gender">
+              <option [ngValue]="null">Sin especificar</option>
+              <option value="masculino">Masculino</option>
+              <option value="femenino">Femenino</option>
+              <option value="unisex">Unisex</option>
+            </select>
+          </div>
+        </div>
+        <div class="ap-form__group">
+          <label>URL de imagen</label>
+          <input type="text" [(ngModel)]="form.image" name="image" placeholder="https://...">
+        </div>
+        <div class="ap-form__actions">
+          <button type="button" class="ap-btn" (click)="closeForm()">Cancelar</button>
+          <button type="submit" class="ap-btn ap-btn--primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Tabla de productos -->
+  <div class="ap-table-wrap">
+    <table class="ap-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Categoría</th>
+          <th>Género</th>
+          <th>Vendedor</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products; track product.id) {
+          <tr>
+            <td>{{ product.id }}</td>
+            <td>
+              @if (product.image) {
+                <img [src]="product.image" [alt]="product.name" class="ap-table__img">
+              } @else {
+                <span class="material-symbols-outlined ap-table__no-img">image</span>
+              }
+            </td>
+            <td><strong>{{ product.name }}</strong></td>
+            <td>{{ product.price | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td>{{ product.category?.name || '—' }}</td>
+            <td>{{ product.gender ? (product.gender | titlecase) : '—' }}</td>
+            <td>{{ product.seller?.name || 'ID: ' + product.seller_id }}</td>
+            <td>
+              <div class="ap-table__actions">
+                <button class="ap-icon-btn" title="Editar">
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+                <button class="ap-icon-btn ap-icon-btn--danger" title="Eliminar" (click)="deleteProduct(product.id)">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
   </div>
 </section>

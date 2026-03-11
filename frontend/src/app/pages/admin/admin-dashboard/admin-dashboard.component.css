@@ -1,10 +1,9 @@
-/* Admin Dashboard — Estilos */
-
 .admin-dashboard {
-  padding: var(--spacing-2xl) var(--spacing-lg);
+  padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-2xl);
 }
 
 .admin-dashboard h1 {
+  color: var(--black);
   margin-bottom: var(--spacing-2xl);
 }
 
@@ -16,22 +15,22 @@
 }
 
 .metric-card {
-  background: var(--color-white);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   padding: var(--spacing-xl);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
   text-align: center;
 }
 
 .metric-card .material-symbols-outlined {
   font-size: 2.5rem;
-  color: var(--color-accent);
+  color: var(--color-primary);
   margin-bottom: var(--spacing-sm);
 }
 
 .metric-card h3 {
-  font-size: 0.9rem;
-  color: var(--color-gray-500);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
   font-weight: 500;
   margin-bottom: var(--spacing-xs);
 }
@@ -40,6 +39,7 @@
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-primary);
+  margin-bottom: 0;
 }
 
 .admin-dashboard__actions {
@@ -52,19 +52,18 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  background: var(--color-white);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   padding: var(--spacing-lg);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  border-radius: var(--radius-lg);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
   color: var(--color-primary);
   font-weight: 600;
 }
 
 .action-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
-  color: var(--color-accent);
 }
 
 .action-card .material-symbols-outlined {

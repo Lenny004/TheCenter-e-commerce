@@ -89,6 +89,28 @@
   font-weight: 500;
 }
 
+.login__error {
+  background: #fef2f2;
+  color: #991b1b;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.login__form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.login__form .form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--black);
+}
+
 .login__form {
   display: flex;
   flex-direction: column;

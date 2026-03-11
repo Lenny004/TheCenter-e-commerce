@@ -1,17 +1,48 @@
 <section class="profile container">
   <header class="profile__header">
-    <h1>Perfil</h1>
-    <a routerLink="/dashboard" class="profile-btn">Volver al dashboard</a>
+    <h1>Mi Perfil</h1>
+    <a routerLink="/" class="profile-btn">
+      <span class="material-symbols-outlined">arrow_back</span>
+      Volver
+    </a>
   </header>
 
   <article class="profile__card">
-    <h3>Adrián</h3>
-    <p>adrian&#64;example.com</p>
+    <div class="profile__avatar">
+      <span class="material-symbols-outlined">person</span>
+    </div>
+    <div class="profile__details">
+      <div class="profile__field">
+        <span class="profile__label">Nombre</span>
+        <span class="profile__value">{{ user.name }}</span>
+      </div>
+      <div class="profile__field">
+        <span class="profile__label">Correo electrónico</span>
+        <span class="profile__value">{{ user.email }}</span>
+      </div>
+      <div class="profile__field">
+        <span class="profile__label">Teléfono</span>
+        <span class="profile__value">{{ user.phone || 'No registrado' }}</span>
+      </div>
+      <div class="profile__field">
+        <span class="profile__label">Rol</span>
+        <span class="profile__role">{{ user.rol | titlecase }}</span>
+      </div>
+    </div>
   </article>
 
   <nav class="profile__actions" aria-label="Acciones de perfil">
-    <a routerLink="/catalogo" class="profile-btn">Catálogo</a>
-    <a routerLink="/carrito" class="profile-btn">Carrito</a>
-    <a routerLink="/login" class="profile-btn profile-btn--primary">Cerrar sesión</a>
+    <a routerLink="/" class="profile-btn">
+      <span class="material-symbols-outlined">home</span>
+      Inicio
+    </a>
+    <a routerLink="/carrito" class="profile-btn">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      Carrito
+    </a>
+    <a routerLink="/login" class="profile-btn profile-btn--primary">
+      <span class="material-symbols-outlined">logout</span>
+      Cerrar sesión
+    </a>
   </nav>
 </section>

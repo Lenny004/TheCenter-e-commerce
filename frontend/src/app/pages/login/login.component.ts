@@ -1,21 +1,39 @@
-// ============================================================================
-// The Center — Página de Inicio de Sesión
-// ============================================================================
-
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  // TODO: Implementar
-  // - Formulario de login (email + contraseña)
-  // - Enviar credenciales a la API
-  // - Guardar token JWT
-  // - Redireccionar al usuario
+  email = '';
+  password = '';
+  errorMsg = '';
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  onSubmit(): void {
+    this.errorMsg = '';
+
+    if (!this.email || !this.password) {
+      this.errorMsg = 'Por favor completa todos los campos.';
+      return;
+    }
+
+    this.authService.login(this.email, this.password).subscribe({
+      next: (res) => {
+        localStorage.setItem('token', res.token);
+        this.router.navigate(['/']);
+      },
+      error: () => this.errorMsg = 'Credenciales incorrectas. Intenta de nuevo.'
+    });
+  }
 }

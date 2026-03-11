@@ -19,9 +19,8 @@ export const routes: Routes = [
   },
   {
     path: 'catalogo',
-    loadComponent: () =>
-      import('./pages/catalog/catalog.component').then(m => m.CatalogComponent),
-    title: 'The Center — Catálogo'
+    redirectTo: '',
+    pathMatch: 'full'
   },
   {
     path: 'producto/:id',

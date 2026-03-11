@@ -1,19 +1,18 @@
-// ============================================================================
-// The Center — Panel de Administración (Dashboard)
-// ============================================================================
-
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css'
 })
 export class AdminDashboardComponent {
-  // TODO: Implementar
-  // - Métricas: ventas totales, stock crítico, pedidos pendientes
-  // - Gráficos de resumen
-  // - Accesos rápidos a gestión de productos y pedidos
+  metrics = {
+    totalSales: '$548.98',
+    lowStock: 2,
+    pendingOrders: 1,
+    totalUsers: 3
+  };
 }

@@ -1,36 +1,106 @@
 <section class="cart container">
   <header class="cart__header">
-    <h1>Carrito</h1>
-    <div class="cart__header-actions">
-      <a routerLink="/dashboard" class="cart-btn">Dashboard</a>
-      <a routerLink="/catalogo" class="cart-btn">Seguir comprando</a>
+    <div>
+      <h1>Tu carrito</h1>
+      <p class="cart__count">{{ items.length }} {{ items.length === 1 ? 'producto' : 'productos' }}</p>
     </div>
+    <a routerLink="/" class="cart__continue">
+      <span class="material-symbols-outlined">arrow_back</span>
+      Seguir comprando
+    </a>
   </header>
 
-  <div class="cart__items">
-    <article class="cart__item">
-      <div>
-        <h3>Zapatillas Swift Glide</h3>
-        <p>Cantidad: 1</p>
-      </div>
-      <p class="cart__item-price">89,99 €</p>
-    </article>
-
-    <article class="cart__item">
-      <div>
-        <h3>Reloj Aura</h3>
-        <p>Cantidad: 1</p>
-      </div>
-      <p class="cart__item-price">159,00 €</p>
-    </article>
-  </div>
-
-  <aside class="cart__summary">
-    <h3>Resumen</h3>
-    <div class="cart__total">
-      <span>Total:</span>
-      <span>248,99 €</span>
+  @if (items.length === 0) {
+    <div class="cart__empty">
+      <span class="material-symbols-outlined cart__empty-icon">shopping_cart</span>
+      <h2>Tu carrito está vacío</h2>
+      <p>Añade productos para empezar a comprar</p>
+      <a routerLink="/" class="cart__empty-btn">Explorar productos</a>
     </div>
-    <a routerLink="/perfil" class="cart-btn cart-btn--primary">Ir a perfil</a>
-  </aside>
+  } @else {
+    <div class="cart__content">
+      <div class="cart__items">
+        @for (item of items; track item.id) {
+          <article class="cart__item">
+            <a [routerLink]="'/producto/' + item.product_id" class="cart__item-image">
+              @if (item.product?.image) {
+                <img [src]="item.product?.image" [alt]="item.product?.name">
+              } @else {
+                <span class="material-symbols-outlined cart__item-no-img">image</span>
+              }
+            </a>
+            <div class="cart__item-details">
+              <div class="cart__item-top">
+                <div>
+                  <a [routerLink]="'/producto/' + item.product_id" class="cart__item-name">
+                    {{ item.product?.name || 'Producto #' + item.product_id }}
+                  </a>
+                  <span class="cart__item-meta">ID: {{ item.product_id }}</span>
+                </div>
+                <button class="cart__item-remove" (click)="removeItem(item.id)" aria-label="Eliminar">
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div class="cart__item-bottom">
+                <div class="cart__item-qty">
+                  <button (click)="updateQty(item.id, -1)" [disabled]="item.quantity <= 1">
+                    <span class="material-symbols-outlined">remove</span>
+                  </button>
+                  <span>{{ item.quantity }}</span>
+                  <button (click)="updateQty(item.id, 1)">
+                    <span class="material-symbols-outlined">add</span>
+                  </button>
+                </div>
+                <span class="cart__item-price">
+                  {{ (item.product?.price || 0) * item.quantity | currency:'USD':'symbol':'1.2-2' }}
+                </span>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+      <aside class="cart__summary">
+        <h3>Resumen del pedido</h3>
+
+        <div class="cart__summary-rows">
+          <div class="cart__summary-row">
+            <span>Subtotal</span>
+            <span>{{ subtotal | currency:'USD':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="cart__summary-row">
+            <span>Envío</span>
+            <span>{{ shipping === 0 ? 'Gratis' : (shipping | currency:'USD':'symbol':'1.2-2') }}</span>
+          </div>
+        </div>
+
+        <div class="cart__summary-total">
+          <span>Total</span>
+          <span>{{ total | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+
+        @if (subtotal < 50) {
+          <div class="cart__free-shipping-hint">
+            <span class="material-symbols-outlined">local_shipping</span>
+            Añade {{ 50 - subtotal | currency:'USD':'symbol':'1.2-2' }} más para envío gratis
+          </div>
+        } @else {
+          <div class="cart__free-shipping-ok">
+            <span class="material-symbols-outlined">check_circle</span>
+            Tu pedido incluye envío gratis
+          </div>
+        }
+
+        <button class="cart__checkout-btn" (click)="checkout()">
+          Finalizar compra
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+
+        <div class="cart__secure">
+          <span class="material-symbols-outlined">lock</span>
+          Pago 100% seguro
+        </div>
+      </aside>
+    </div>
+  }
 </section>

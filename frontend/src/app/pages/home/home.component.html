@@ -15,49 +15,49 @@
   </header>
 
   <nav class="dashboard__tabs" aria-label="Categorías">
-    <button type="button" class="dash-tab dash-tab--active">Todos los productos</button>
-    <button type="button" class="dash-tab">Zapatillas</button>
-    <button type="button" class="dash-tab">Accesorios</button>
-    <button type="button" class="dash-tab">Oferta flash</button>
-    <button type="button" class="dash-tab">Más vendidos</button>
+    <button type="button"
+            class="dash-tab"
+            [class.dash-tab--active]="activeCategory === 0"
+            (click)="setCategory(0)">
+      Todos los productos
+    </button>
+    @for (cat of categories; track cat.id) {
+      <button type="button"
+              class="dash-tab"
+              [class.dash-tab--active]="activeCategory === cat.id"
+              (click)="setCategory(cat.id)">
+        {{ cat.name }}
+      </button>
+    }
   </nav>
 
   <div class="dashboard__grid">
-    <article class="dashboard-card">
-      <img src="assets/home/product-1.jpg" alt="Zapatillas Swift Glide">
-      <div class="dashboard-card__body">
-        <h3>Zapatillas Swift Glide</h3>
-        <p>89,99 €</p>
-        <a routerLink="/catalogo" class="dash-btn dash-btn--primary">Ver en catálogo</a>
-      </div>
-    </article>
-
-    <article class="dashboard-card">
-      <img src="assets/home/product-2.jpg" alt="Reloj Aura">
-      <div class="dashboard-card__body">
-        <h3>Reloj Aura</h3>
-        <p>159,00 €</p>
-        <a routerLink="/catalogo" class="dash-btn dash-btn--primary">Ver en catálogo</a>
-      </div>
-    </article>
-
-    <article class="dashboard-card">
-      <img src="assets/home/product-3.jpg" alt="PureAudio Elite">
-      <div class="dashboard-card__body">
-        <h3>PureAudio Elite</h3>
-        <p>299,99 €</p>
-        <a routerLink="/catalogo" class="dash-btn dash-btn--primary">Ver en catálogo</a>
-      </div>
-    </article>
-
-    <article class="dashboard-card">
-      <img src="assets/home/product-4.jpg" alt="Mochila Nomad Leather">
-      <div class="dashboard-card__body">
-        <h3>Mochila Nomad Leather</h3>
-        <p>124,50 €</p>
-        <a routerLink="/catalogo" class="dash-btn dash-btn--primary">Ver en catálogo</a>
-      </div>
-    </article>
+    @for (product of filteredProducts; track product.id) {
+      <article class="dashboard-card">
+        <a [routerLink]="'/producto/' + product.id">
+          @if (product.image) {
+            <img [src]="product.image" [alt]="product.name">
+          } @else {
+            <div class="dashboard-card__no-img">
+              <span class="material-symbols-outlined">image</span>
+            </div>
+          }
+        </a>
+        <div class="dashboard-card__body">
+          <div class="dashboard-card__tags">
+            @if (product.category) {
+              <span class="dashboard-card__tag">{{ product.category.name }}</span>
+            }
+            @if (product.gender) {
+              <span class="dashboard-card__tag dashboard-card__tag--gender">{{ product.gender | titlecase }}</span>
+            }
+          </div>
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.price | currency:'USD':'symbol':'1.2-2' }}</p>
+          <a [routerLink]="'/producto/' + product.id" class="dash-btn dash-btn--primary">Ver detalle</a>
+        </div>
+      </article>
+    }
   </div>
 
   <nav class="dashboard__bottom" aria-label="Navegación principal">
@@ -65,17 +65,13 @@
       <span class="material-symbols-outlined">home</span>
       <span>Inicio</span>
     </a>
-    <a routerLink="/catalogo" class="bottom-link">
-      <span class="material-symbols-outlined">search</span>
-      <span>Buscar</span>
+    <a routerLink="/carrito" class="bottom-link">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Carrito</span>
     </a>
     <a routerLink="/perfil" class="bottom-link">
       <span class="material-symbols-outlined">person</span>
       <span>Perfil</span>
-    </a>
-    <a routerLink="/carrito" class="bottom-link">
-      <span class="material-symbols-outlined">shopping_bag</span>
-      <span>Carrito</span>
     </a>
   </nav>
 </section>
