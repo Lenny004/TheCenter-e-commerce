@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768" role="img" aria-label="Brand location logo">
+  <rect width="768" height="768" fill="#f0f0f0"/>
+  <circle cx="384" cy="384" r="318" fill="none" stroke="#f20d0d" stroke-width="36"/>
+  <path fill="#f20d0d" d="M384 224c-57.4 0-104 46.6-104 104 0 17.9 4.6 34.7 12.5 49.4l74.1 156.8c7.1 15 28.4 15 35.5 0l74.1-156.8c7.9-14.7 12.5-31.5 12.5-49.4 0-57.4-46.6-104-104-104zm0 144c-22.1 0-40-17.9-40-40s17.9-40 40-40 40 17.9 40 40-17.9 40-40 40z"/>
+</svg>

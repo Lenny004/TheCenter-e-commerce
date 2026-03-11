@@ -4,7 +4,9 @@
 
 <header class="header">
   <div class="header__container container">
-    <a class="header__logo" href="/">The Center</a>
+    <a class="header__logo" routerLink="/" aria-label="Inicio">
+      <img src="assets/brand-location.svg" alt="Logo de marca">
+    </a>
     <nav class="header__nav">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
       <a routerLink="/catalogo" routerLinkActive="active">Catálogo</a>

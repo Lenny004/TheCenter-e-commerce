@@ -1,27 +1,81 @@
-<!-- Página de Inicio -->
-<section class="hero">
-  <div class="container">
-    <h1>Bienvenido a The Center</h1>
-    <p>Tu destino para moda de calidad. Descubre las últimas tendencias en ropa para todos los estilos.</p>
-    <a routerLink="/catalogo" class="btn btn--primary">Ver Catálogo</a>
-  </div>
-</section>
+<section class="dashboard container">
+  <header class="dashboard__header">
+    <div>
+      <img class="dashboard__brand-logo" src="assets/brand-location.svg" alt="Logo de marca">
+      <h1>Dashboard</h1>
+    </div>
+    <div class="dashboard__actions">
+      <a routerLink="/perfil" class="dash-btn dash-btn--icon" aria-label="Ir al perfil">
+        <span class="material-symbols-outlined">person</span>
+      </a>
+      <a routerLink="/carrito" class="dash-btn dash-btn--icon" aria-label="Ir al carrito">
+        <span class="material-symbols-outlined">shopping_cart</span>
+      </a>
+    </div>
+  </header>
 
-<section class="featured container">
-  <h2>Categorías Destacadas</h2>
-  <!-- TODO: Renderizar categorías dinámicamente -->
-  <div class="featured__grid">
-    <div class="featured__card">
-      <span class="material-symbols-outlined">checkroom</span>
-      <h3>Hombre</h3>
-    </div>
-    <div class="featured__card">
-      <span class="material-symbols-outlined">styler</span>
-      <h3>Mujer</h3>
-    </div>
-    <div class="featured__card">
-      <span class="material-symbols-outlined">diversity_3</span>
-      <h3>Unisex</h3>
-    </div>
+  <nav class="dashboard__tabs" aria-label="Categorías">
+    <button type="button" class="dash-tab dash-tab--active">Todos los productos</button>
+    <button type="button" class="dash-tab">Zapatillas</button>
+    <button type="button" class="dash-tab">Accesorios</button>
+    <button type="button" class="dash-tab">Oferta flash</button>
+    <button type="button" class="dash-tab">Más vendidos</button>
+  </nav>
+
+  <div class="dashboard__grid">
+    <article class="dashboard-card">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVadQIg6i4kGy8kFX59gCW3jcLvdjo75UsP2ySylvq2tK9lCDS7u9wFNx772MUS4mv4aLvsJV6e6kAJnEktxmdy3OTJ0BcNJJWfoHCtcKkhIWefIR3OoyudiE26qDhqG3bLUfVoQvmnPCRfa2xmxLaEIdiM1bUoGPWtDM5f1iZTXLonYJLeGAa6bhR2uvGNYXxVwfFt9rQvND-PcwRSR2dmpXuwwI6zdfvHRIqETVygIM3MdePIV8Zl7byQIdJahRLz0q0ReFKlPk" alt="Zapatillas Swift Glide">
+      <div class="dashboard-card__body">
+        <h3>Zapatillas Swift Glide</h3>
+        <p>89,99 €</p>
+        <a routerLink="/catalogo" class="dash-btn dash-btn--primary">Ver en catálogo</a>
+      </div>
+    </article>
+
+    <article class="dashboard-card">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzlVIPzkNwdRyVMp9O_uN5CCrfZmy3rKQdB-IbOWad9ddGI8-zChdsZkRlCJ43CTdriWFoEdWUP1GNQojih3j9gBHaH50BXNQHZV2JwR8ioS8Dg_nitQ-HBPHfZiMhFWfgO99dUK0fxJEl0s2wUsHCor66VvkSNaMyzz-9kgWu11Mp8GjCDbMnKiFZq5h1RvDI6idU5kEEdqxUkV_CmEvRH1aIzDoNsBzLqsV1qXsNNW2VFhYqlMOTfUnq9co4kibjQSCeSrVsjB8" alt="Reloj Aura">
+      <div class="dashboard-card__body">
+        <h3>Reloj Aura</h3>
+        <p>159,00 €</p>
+        <a routerLink="/catalogo" class="dash-btn dash-btn--primary">Ver en catálogo</a>
+      </div>
+    </article>
+
+    <article class="dashboard-card">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3MSWnbd3o2Ael_oO0c8N5nC5HyNSSaTXKVGWkcjcLPIT3WEq2A2Cw0kN1D65Z93iDYyP5nASLCo4CXarJWTkL-59k2I9iNh1YermLkXl3K1o5xZIsUzh0MLturlDp35mBPFwC1um09gUlHLs7HgYiefFoacD6qiPHk-w6U5iedWmqxrzcKuOufapRBE3Je_q8llVuu87RZq8uYi2C6wLOEpjUwVXtlV5DfJTBu7BWNK6FRfNllSvq3yDUgpI6le_3mV4gFiSvxeg" alt="PureAudio Elite">
+      <div class="dashboard-card__body">
+        <h3>PureAudio Elite</h3>
+        <p>299,99 €</p>
+        <a routerLink="/catalogo" class="dash-btn dash-btn--primary">Ver en catálogo</a>
+      </div>
+    </article>
+
+    <article class="dashboard-card">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-ZJ9US3-jst6s91819D1ca-mPvYsMDUZ61A3gEj9ygg2oD_pr11TeUkTVhpGFYfkM047KwOs9WRHlLtH6xNGB8YckdkDvwek4QfWnoePy_puYVP6HREwi5WiIbBIDE-NY5KnZ9pjXIaC1lZVZLCuAVx_lvlAuG00Fa9sSPxr_Ruk7wwvcv2m8zYfzFe07TIFIRE4mPci7RfXnlfASwJfAdHZ3LgdJ7tpm0GMT0z3Ebo6nG64QjBowmf5_7efZUdVPVAjU4eRfyaY" alt="Mochila Nomad Leather">
+      <div class="dashboard-card__body">
+        <h3>Mochila Nomad Leather</h3>
+        <p>124,50 €</p>
+        <a routerLink="/catalogo" class="dash-btn dash-btn--primary">Ver en catálogo</a>
+      </div>
+    </article>
   </div>
+
+  <nav class="dashboard__bottom" aria-label="Navegación principal">
+    <a routerLink="/dashboard" class="bottom-link bottom-link--active">
+      <span class="material-symbols-outlined">home</span>
+      <span>Inicio</span>
+    </a>
+    <a routerLink="/catalogo" class="bottom-link">
+      <span class="material-symbols-outlined">search</span>
+      <span>Buscar</span>
+    </a>
+    <a routerLink="/perfil" class="bottom-link">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </a>
+    <a routerLink="/carrito" class="bottom-link">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Carrito</span>
+    </a>
+  </nav>
 </section>

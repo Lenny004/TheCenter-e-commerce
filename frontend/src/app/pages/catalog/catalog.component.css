@@ -1,30 +1,106 @@
 /* Página de Catálogo — Estilos */
 
 .catalog {
-  padding: var(--spacing-2xl) var(--spacing-lg);
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-2xl);
 }
 
-.catalog h1 {
-  margin-bottom: var(--spacing-xl);
+.catalog__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.catalog__actions {
+  display: flex;
+  gap: var(--spacing-sm);
 }
 
 .catalog__filters {
   margin-bottom: var(--spacing-xl);
   padding: var(--spacing-lg);
-  background: var(--color-white);
+  background: var(--color-surface);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow);
+}
+
+.catalog__chips {
+  margin-top: var(--spacing-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.catalog__chips button {
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--black);
+  padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .catalog__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: var(--spacing-xl);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.catalog__card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.catalog__brand {
+  font-size: 0.875rem;
+  margin-bottom: 0;
+}
+
+.catalog__brand-logo {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
+.catalog__price {
+  margin-bottom: 0;
+  color: var(--black);
+  font-weight: 700;
+}
+
+.catalog-btn {
+  min-height: 2.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--black);
+  padding: 0 var(--spacing-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.catalog-btn--primary {
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
+}
+
+.catalog__profile-link {
+  display: inline-flex;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
-  .catalog__grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: var(--spacing-md);
+  .catalog__header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

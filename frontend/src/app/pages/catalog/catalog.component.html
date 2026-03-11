@@ -1,17 +1,42 @@
-<!-- Página de Catálogo -->
 <section class="catalog container">
-  <h1>Catálogo</h1>
+  <header class="catalog__header">
+    <h1>Catálogo</h1>
+    <div class="catalog__actions">
+      <a routerLink="/dashboard" class="catalog-btn">Dashboard</a>
+      <a routerLink="/carrito" class="catalog-btn catalog-btn--primary">Carrito</a>
+    </div>
+  </header>
 
-  <!-- TODO: Filtros dinámicos -->
   <aside class="catalog__filters">
     <h3>Filtros</h3>
-    <!-- Filtro por género -->
-    <!-- Filtro por categoría -->
-    <!-- Filtro por talla -->
+    <div class="catalog__chips">
+      <button type="button">Zapatillas</button>
+      <button type="button">Accesorios</button>
+      <button type="button">Oferta flash</button>
+      <button type="button">Más vendidos</button>
+    </div>
   </aside>
 
-  <!-- TODO: Grid de productos -->
   <div class="catalog__grid">
-    <p>Cargando productos...</p>
+    <article class="catalog__card">
+      <img class="catalog__brand-logo" src="assets/brand-location.svg" alt="Logo de marca">
+      <h3>Zapatillas Swift Glide</h3>
+      <p class="catalog__price">89,99 €</p>
+      <a routerLink="/carrito" class="catalog-btn catalog-btn--primary">Añadir al carrito</a>
+    </article>
+    <article class="catalog__card">
+      <img class="catalog__brand-logo" src="assets/brand-location.svg" alt="Logo de marca">
+      <h3>Reloj Aura</h3>
+      <p class="catalog__price">159,00 €</p>
+      <a routerLink="/carrito" class="catalog-btn catalog-btn--primary">Añadir al carrito</a>
+    </article>
+    <article class="catalog__card">
+      <img class="catalog__brand-logo" src="assets/brand-location.svg" alt="Logo de marca">
+      <h3>PureAudio Elite</h3>
+      <p class="catalog__price">299,99 €</p>
+      <a routerLink="/carrito" class="catalog-btn catalog-btn--primary">Añadir al carrito</a>
+    </article>
   </div>
+
+  <a routerLink="/perfil" class="catalog__profile-link">Ir a perfil</a>
 </section>

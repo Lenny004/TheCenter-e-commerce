@@ -9,7 +9,13 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./pages/home/home.component').then(m => m.HomeComponent),
-    title: 'The Center — Inicio'
+    title: 'The Center — Dashboard'
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./pages/home/home.component').then(m => m.HomeComponent),
+    title: 'The Center — Dashboard'
   },
   {
     path: 'catalogo',
@@ -28,6 +34,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/cart/cart.component').then(m => m.CartComponent),
     title: 'The Center — Carrito'
+  },
+  {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./pages/profile/profile.component').then(m => m.ProfileComponent),
+    title: 'The Center — Perfil'
   },
   {
     path: 'login',

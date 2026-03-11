@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#f20d0d",
+              "background-light": "#f8f5f5",
+              "background-dark": "#221010",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<title>Login - E-commerce App</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-md bg-white dark:bg-[#2d1a1a] rounded-xl shadow-sm p-8 md:p-12">
+<!-- Top App Bar / Back Navigation -->
+<div class="flex items-center mb-8 -mt-4 -ml-4">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+</div>
+<!-- Central Circular Brand Logo -->
+<div class="flex flex-col items-center mb-10">
+<div class="size-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 overflow-hidden border-2 border-primary/20">
+<div class="w-full h-full bg-cover bg-center" data-alt="Minimalist abstract circular red brand logo icon" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8TtUuoh4c0GhLVhhl_RGSoEg-cdIPEWp3ZGToEsmj_mcMubf9ixPFQxfyY6KI5prQ5ViacVec_FuDN-5X_en5wGit0a9iRuaAwSfnD2DdAVfP2vrT04Sp5ORx-vXBn0vFjQZKAEoZ8NrvFnzBdQZjkB46QsrpeFpddxDyWPKMMZqvivI0aRYGGGJMYzIp_0xNlsTvZea6WdN5DmvV-hNx5Ro3XSUy5UNtzE9GET85aixgVc83hFIftm53RLru-t_1VeJdGisMKAE')"></div>
+</div>
+<h1 class="text-[#181111] dark:text-white text-2xl font-bold leading-tight tracking-tight text-center">
+                Sign in or create account
+            </h1>
+</div>
+<!-- Soft Legal Banner -->
+<div class="mb-8">
+<p class="text-[#8a6060] dark:text-[#b09898] text-sm text-center leading-relaxed">
+                By continuing, you agree to our 
+                <a class="text-primary font-medium hover:underline" href="#">Terms of Use</a> 
+                and 
+                <a class="text-primary font-medium hover:underline" href="#">Privacy Policy</a>.
+            </p>
+</div>
+<!-- Login Form -->
+<div class="space-y-4">
+<!-- Single Input Field -->
+<div class="relative">
+<label class="sr-only">Email or mobile phone</label>
+<input class="w-full h-14 px-6 rounded-full border border-[#e6dbdb] dark:border-[#4d3a3a] bg-white dark:bg-[#3d2a2a] text-[#181111] dark:text-white placeholder:text-[#8a6060] focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Email or mobile phone" type="text"/>
+</div>
+<!-- Primary Action -->
+<button class="w-full h-14 bg-primary hover:bg-red-700 text-white font-bold rounded-full transition-colors shadow-lg shadow-primary/20 flex items-center justify-center">
+                Continue
+            </button>
+</div>
+<!-- Visual Separator -->
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-[#e6dbdb] dark:border-[#4d3a3a]"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-4 bg-white dark:bg-[#2d1a1a] text-[#8a6060] font-medium">or</span>
+</div>
+</div>
+<!-- Secondary Action: Passkey -->
+<button class="w-full h-14 border-2 border-[#e6dbdb] dark:border-[#4d3a3a] text-[#181111] dark:text-white font-semibold rounded-full hover:bg-primary/5 transition-colors flex items-center justify-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">fingerprint</span>
+            Sign in with passkey
+        </button>
+<!-- Keep Me Signed In -->
+<div class="flex items-center justify-center">
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative">
+<input class="peer sr-only" type="checkbox"/>
+<div class="size-6 border-2 border-[#e6dbdb] dark:border-[#4d3a3a] rounded-full peer-checked:bg-primary peer-checked:border-primary transition-all"></div>
+<span class="material-symbols-outlined absolute inset-0 text-white scale-0 peer-checked:scale-75 transition-transform flex items-center justify-center" style="font-size: 20px;">check</span>
+</div>
+<span class="text-[#181111] dark:text-white text-sm font-medium select-none group-hover:text-primary transition-colors">Keep me signed in</span>
+</label>
+</div>
+<!-- Footer Help -->
+<div class="mt-12 text-center">
+<button class="text-[#8a6060] dark:text-[#b09898] text-sm hover:text-primary transition-colors font-medium">
+                Need help signing in?
+            </button>
+</div>
+</div>
+</body></html>

@@ -1,19 +1,36 @@
-<!-- Página de Carrito -->
 <section class="cart container">
-  <h1>Carrito de Compras</h1>
+  <header class="cart__header">
+    <h1>Carrito</h1>
+    <div class="cart__header-actions">
+      <a routerLink="/dashboard" class="cart-btn">Dashboard</a>
+      <a routerLink="/catalogo" class="cart-btn">Seguir comprando</a>
+    </div>
+  </header>
 
-  <!-- TODO: Lista de items del carrito -->
   <div class="cart__items">
-    <p>Tu carrito está vacío.</p>
+    <article class="cart__item">
+      <div>
+        <h3>Zapatillas Swift Glide</h3>
+        <p>Cantidad: 1</p>
+      </div>
+      <p class="cart__item-price">89,99 €</p>
+    </article>
+
+    <article class="cart__item">
+      <div>
+        <h3>Reloj Aura</h3>
+        <p>Cantidad: 1</p>
+      </div>
+      <p class="cart__item-price">159,00 €</p>
+    </article>
   </div>
 
-  <!-- TODO: Resumen del pedido -->
   <aside class="cart__summary">
     <h3>Resumen</h3>
     <div class="cart__total">
       <span>Total:</span>
-      <span>$0.00</span>
+      <span>248,99 €</span>
     </div>
-    <button class="btn btn--primary btn--full" disabled>Proceder al pago</button>
+    <a routerLink="/perfil" class="cart-btn cart-btn--primary">Ir a perfil</a>
   </aside>
 </section>

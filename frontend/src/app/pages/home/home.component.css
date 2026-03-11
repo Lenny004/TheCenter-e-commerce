@@ -1,90 +1,142 @@
-/* Página de Inicio — Estilos */
+/* Dashboard — Estilos específicos */
 
-.hero {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  text-align: center;
-  padding: var(--spacing-3xl) var(--spacing-lg);
+.dashboard {
+  padding-top: var(--spacing-xl);
+  padding-bottom: calc(var(--spacing-2xl) + 5rem);
 }
 
-.hero h1 {
-  color: var(--color-white);
-  font-size: 2.5rem;
-  margin-bottom: var(--spacing-md);
+.dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
 }
 
-.hero p {
-  color: var(--color-gray-300);
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: 0 auto var(--spacing-xl);
+.dashboard__kicker {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xs);
 }
 
-.btn {
-  display: inline-block;
-  padding: var(--spacing-sm) var(--spacing-xl);
-  border-radius: var(--radius-md);
+.dashboard__brand-logo {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  margin-bottom: var(--spacing-xs);
+}
+
+.dashboard__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.dash-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  min-height: 2.5rem;
+  padding: 0 var(--spacing-md);
+  transition: background-color var(--transition-fast);
+}
+
+.dash-btn--icon {
+  width: 2.5rem;
+  padding: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--black);
+}
+
+.dash-btn--primary {
+  background: var(--color-primary);
+  color: var(--color-surface);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all var(--transition-base);
 }
 
-.btn--primary {
-  background-color: var(--color-accent);
-  color: var(--color-white);
+.dashboard__tabs {
+  display: flex;
+  gap: var(--spacing-sm);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
 }
 
-.btn--primary:hover {
-  background-color: var(--color-accent-hover);
-  color: var(--color-white);
+.dash-tab {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--black);
+  border-radius: var(--radius-pill);
+  padding: var(--spacing-sm) var(--spacing-md);
+  white-space: nowrap;
 }
 
-.featured {
-  padding: var(--spacing-3xl) var(--spacing-lg);
-  text-align: center;
+.dash-tab--active {
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
 }
 
-.featured h2 {
-  margin-bottom: var(--spacing-2xl);
-}
-
-.featured__grid {
+.dashboard__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-xl);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--spacing-lg);
 }
 
-.featured__card {
-  background: var(--color-white);
-  padding: var(--spacing-2xl);
+.dashboard-card {
+  background: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
-  cursor: pointer;
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
-.featured__card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+.dashboard-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
-.featured__card .material-symbols-outlined {
-  font-size: 3rem;
-  color: var(--color-accent);
-  margin-bottom: var(--spacing-md);
+.dashboard-card__body {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
-.featured__card h3 {
-  font-size: 1.1rem;
+.dashboard-card__body h3 {
+  font-size: 1rem;
+  color: var(--black);
 }
 
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 1.75rem;
-  }
+.dashboard-card__body p {
+  margin-bottom: 0;
+  color: var(--black);
+  font-weight: 600;
+}
 
-  .hero p {
-    font-size: 1rem;
-  }
+.dashboard__bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4.5rem;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  z-index: 10;
+}
+
+.bottom-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.bottom-link--active {
+  color: var(--color-primary);
 }

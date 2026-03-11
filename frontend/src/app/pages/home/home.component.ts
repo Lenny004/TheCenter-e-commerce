@@ -1,5 +1,5 @@
 // ============================================================================
-// The Center — Página de Inicio (Home)
+// The Center — Dashboard principal
 // ============================================================================
 
 import { Component } from '@angular/core';
@@ -13,8 +13,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  // TODO: Implementar lógica de la página de inicio
-  // - Productos destacados
-  // - Categorías principales
-  // - Banner promocional
+  // Vista estática con navegación entre secciones principales.
 }
