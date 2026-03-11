@@ -84,6 +84,9 @@
   align-items: center;
   justify-content: center;
   margin-top: var(--spacing-sm);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  box-shadow: var(--red-shadow);
 }
 
 .register__login {

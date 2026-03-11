@@ -52,6 +52,7 @@
   background: var(--color-primary);
   color: var(--color-surface);
   font-weight: 600;
+  box-shadow: var(--red-shadow);
 }
 
 .dashboard__tabs {

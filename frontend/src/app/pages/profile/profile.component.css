@@ -42,6 +42,7 @@
   background: var(--color-primary);
   color: var(--color-surface);
   border-color: var(--color-primary);
+  box-shadow: var(--red-shadow);
 }
 
 @media (max-width: 768px) {

@@ -133,6 +133,7 @@
 .btn-primary {
   background: var(--color-primary);
   color: #fff;
+  box-shadow: var(--red-shadow);
 }
 
 .btn-primary:hover {
