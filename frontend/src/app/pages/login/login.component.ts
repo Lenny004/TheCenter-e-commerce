@@ -10,6 +10,7 @@ import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService, normalizeSessionUser, UserSession } from '../../services/auth.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -32,8 +33,25 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authService
+      .getSetupStatus()
+      .pipe(take(1))
+      .subscribe({
+        next: (s) => {
+          if (s.needsAdminSetup) {
+            this.router.navigate(['/registro'], { queryParams: { setup: '1' } });
+          }
+        },
+        error: () => {
+          /* Si la API no responde, se muestra el login normal */
+        }
+      });
+
     if (this.route.snapshot.queryParamMap.get('registro') === 'ok') {
       this.successMsg = 'Cuenta creada. Inicia sesión con tu correo y contraseña.';
+    }
+    if (this.route.snapshot.queryParamMap.get('setup') === 'ok') {
+      this.successMsg = 'Cuenta de administrador creada. Inicia sesión para continuar.';
     }
   }
 

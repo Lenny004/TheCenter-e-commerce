@@ -1,10 +1,23 @@
 <section class="admin-page">
   <header class="admin-page__header">
     <div>
-      <h1 class="admin-page__title">Usuarios</h1>
+      <h1 class="admin-page__title">Empleados y cuentas</h1>
       <p class="admin-page__subtitle">
-        Campos alineados con la tabla <code>user</code>: nombre, teléfono, email, rol. La contraseña se almacena con hash en el servidor.
+        Consulta el personal (administradores y vendedores) y las cuentas de cliente. La contraseña se guarda con hash en el servidor.
       </p>
+      <div class="admin-page__toolbar">
+        <label class="admin-page__filter-label" for="user-role-filter">Mostrar</label>
+        <select
+          id="user-role-filter"
+          name="roleFilter"
+          class="admin-page__filter"
+          [(ngModel)]="roleFilter"
+        >
+          <option value="staff">Solo empleados (admin y vendedores)</option>
+          <option value="all">Todos los usuarios</option>
+          <option value="cliente">Solo clientes</option>
+        </select>
+      </div>
     </div>
     <button type="button" class="admin-btn admin-btn--primary" (click)="openCreate()">
       <span class="material-symbols-outlined">person_add</span>
@@ -32,7 +45,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (u of users; track u.id) {
+        @for (u of filteredUsers; track u.id) {
           <tr>
             <td>{{ u.id }}</td>
             <td><strong>{{ u.name }}</strong></td>
@@ -52,7 +65,13 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="6" class="admin-table__empty">No hay usuarios.</td>
+            <td colspan="6" class="admin-table__empty">
+              @if (users.length === 0) {
+                No hay usuarios.
+              } @else {
+                Ningún usuario coincide con el filtro.
+              }
+            </td>
           </tr>
         }
       </tbody>

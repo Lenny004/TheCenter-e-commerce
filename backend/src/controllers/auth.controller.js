@@ -20,6 +20,15 @@ function userTypeFromRol(rol) {
     return rol === 'cliente' ? 1 : 2;
 }
 
+/**
+ * GET /api/auth/setup-status
+ * Indica si la base está sin usuarios: el primer registro debe ser administrador.
+ */
+export async function setupStatus(_req, res) {
+    const count = await prisma.user.count();
+    res.json({ needsAdminSetup: count === 0 });
+}
+
 // ── REGISTRO ────────────────────────────────────────────────────────────────
 // Controlador para POST /api/auth/register
 
@@ -33,6 +42,23 @@ export async function register(req, res) {
         return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres.' });
     }
 
+    const userCount = await prisma.user.count();
+    let effectiveRol;
+
+    if (userCount === 0) {
+        // Primer usuario: siempre administrador (no se acepta otro rol por API pública)
+        effectiveRol = 'admin';
+    } else {
+        const requested = rol != null ? String(rol).trim() : 'cliente';
+        if (requested === 'admin') {
+            return res.status(403).json({
+                error:
+                    'No puedes registrarte como administrador aquí. Un administrador debe crear esa cuenta desde el panel.'
+            });
+        }
+        effectiveRol = requested === 'vendedor' ? 'vendedor' : 'cliente';
+    }
+
     // Costo del hash bcrypt (10 es el valor habitual recomendado)
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -43,7 +69,7 @@ export async function register(req, res) {
                 email,
                 password: hashedPassword,
                 phone: phone || null,
-                rol: rol || 'cliente'
+                rol: effectiveRol
             }
         });
 

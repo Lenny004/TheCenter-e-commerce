@@ -9,6 +9,10 @@ import { UserRole } from '../models';
 
 const API = '/api/auth';
 
+export interface SetupStatusResponse {
+  needsAdminSetup: boolean;
+}
+
 interface RegisterPayload {
   name: string;
   email: string;
@@ -56,6 +60,11 @@ export function normalizeSessionUser(
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(private http: HttpClient) {}
+
+  /** Sin autenticación: indica si hace falta crear el primer usuario como administrador. */
+  getSetupStatus(): Observable<SetupStatusResponse> {
+    return this.http.get<SetupStatusResponse>(`${API}/setup-status`);
+  }
 
   register(data: RegisterPayload): Observable<unknown> {
     return this.http.post(`${API}/register`, data);

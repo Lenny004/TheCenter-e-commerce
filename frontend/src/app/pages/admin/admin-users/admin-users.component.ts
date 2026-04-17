@@ -18,6 +18,8 @@ import { AdminModalComponent } from '../../../components/admin-modal/admin-modal
 })
 export class AdminUsersComponent implements OnInit {
   users: User[] = [];
+  /** Filtro de listado: todos, solo personal interno o solo clientes de tienda. */
+  roleFilter: 'all' | 'staff' | 'cliente' = 'staff';
   roles: UserRole[] = ['admin', 'vendedor', 'cliente'];
 
   modalOpen = false;
@@ -37,6 +39,16 @@ export class AdminUsersComponent implements OnInit {
   saving = false;
 
   constructor(private userAdminService: UserAdminService) {}
+
+  get filteredUsers(): User[] {
+    if (this.roleFilter === 'staff') {
+      return this.users.filter((u) => u.rol === 'admin' || u.rol === 'vendedor');
+    }
+    if (this.roleFilter === 'cliente') {
+      return this.users.filter((u) => u.rol === 'cliente');
+    }
+    return this.users;
+  }
 
   ngOnInit(): void {
     this.load();

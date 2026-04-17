@@ -126,6 +126,14 @@
   font-weight: 600;
 }
 
+.register__login--muted {
+  color: var(--color-text-muted);
+}
+
+.register__login--muted a {
+  font-weight: 500;
+}
+
 @media (max-width: 480px) {
   .register__card {
     padding: var(--spacing-lg);

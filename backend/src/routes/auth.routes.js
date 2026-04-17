@@ -4,12 +4,15 @@
 // Asocia cada ruta HTTP con su controlador (p. ej. POST /register → register).
 
 import { Router } from 'express';
-import { register, login } from '../controllers/auth.controller.js';
+import { register, login, setupStatus } from '../controllers/auth.controller.js';
 
 // Envuelve handlers async para que los errores lleguen al middleware de Express
 const wrapAsync = fn => (req, res, next) => fn(req, res, next).catch(next);
 
 const router = Router();
+
+// GET /api/auth/setup-status  →  true si no hay usuarios (primer uso = alta obligatoria de admin)
+router.get('/setup-status', wrapAsync(setupStatus));
 
 // POST /api/auth/register  →  crea un nuevo usuario
 router.post('/register', wrapAsync(register));

@@ -177,6 +177,31 @@ input, select, textarea {
   border-radius: var(--radius-md);
 }
 
+.admin-page__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.admin-page__filter-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--black);
+}
+
+.admin-page__filter {
+  min-width: 14rem;
+  height: 2.5rem;
+  padding: 0 var(--spacing-md);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 0.875rem;
+  color: var(--black);
+}
+
 .admin-btn {
   display: inline-flex;
   align-items: center;

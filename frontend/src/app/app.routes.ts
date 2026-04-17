@@ -97,7 +97,7 @@ export const routes: Routes = [
         canActivate: [adminOnlyGuard],
         loadComponent: () =>
           import('./pages/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent),
-        title: 'The Center — Usuarios'
+        title: 'The Center — Empleados y cuentas'
       }
     ]
   },
