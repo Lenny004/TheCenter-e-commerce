@@ -5,7 +5,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User, UserRole } from '../models';
+import { UserRole } from '../models';
 
 const API = '/api/auth';
 
@@ -17,11 +17,15 @@ interface RegisterPayload {
   rol?: UserRole;
 }
 
+/** 1 = usuario de tienda pública; 2 = usuario con acceso al área privada (admin / vendedor) */
+export type UserType = 1 | 2;
+
 export interface UserSession {
   id: number;
   name: string;
   email: string;
   rol: UserRole;
+  userType: UserType;
 }
 
 interface LoginResponse {
@@ -56,7 +60,12 @@ export class AuthService {
     const raw = localStorage.getItem(USER_KEY);
     if (!raw) return null;
     try {
-      return JSON.parse(raw) as UserSession;
+      const u = JSON.parse(raw) as UserSession;
+      // Compatibilidad con sesiones anteriores sin userType: se infiere del rol
+      if (u.userType == null && u.rol) {
+        u.userType = u.rol === 'cliente' ? 1 : 2;
+      }
+      return u;
     } catch {
       return null;
     }
@@ -73,5 +82,10 @@ export class AuthService {
 
   isAdmin(): boolean {
     return this.getUser()?.rol === 'admin';
+  }
+
+  /** Indica si el usuario debe usar el área privada (panel / gestión) */
+  isPrivateAreaUser(): boolean {
+    return this.getUser()?.userType === 2;
   }
 }

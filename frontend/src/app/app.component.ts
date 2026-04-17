@@ -19,7 +19,8 @@ export class AppComponent {
 
   constructor(private auth: AuthService) {}
 
-  isAdmin(): boolean {
-    return this.auth.isAdmin();
+  /** Muestra el enlace al panel cuando el usuario es de área privada (tipo 2) */
+  showPrivateAreaLink(): boolean {
+    return this.auth.isPrivateAreaUser();
   }
 }

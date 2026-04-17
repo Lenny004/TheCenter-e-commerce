@@ -5,7 +5,22 @@
 import jwt from 'jsonwebtoken';
 
 /**
- * Verifica Bearer JWT y adjunta `req.user` = { id, email, rol }.
+ * Si hay Bearer JWT válido, adjunta `req.user`; si no hay token o es inválido, continúa sin usuario.
+ * Sirve para rutas públicas que deben aplicar reglas distintas cuando el cliente está autenticado.
+ */
+export function optionalVerifyToken(req, res, next) {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return next();
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+  } catch {
+    req.user = undefined;
+  }
+  next();
+}
+
+/**
+ * Verifica Bearer JWT y adjunta `req.user` = { id, email, rol, userType }.
  */
 export function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;

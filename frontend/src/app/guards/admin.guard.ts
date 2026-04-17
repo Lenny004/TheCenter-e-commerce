@@ -14,7 +14,8 @@ export const adminGuard: CanActivateFn = () => {
     router.navigate(['/login'], { queryParams: { next: '/admin' } });
     return false;
   }
-  if (!authService.isAdmin()) {
+  // Permite acceso al área privada a usuarios tipo 2 (admin y vendedor)
+  if (!authService.isPrivateAreaUser()) {
     router.navigate(['/']);
     return false;
   }

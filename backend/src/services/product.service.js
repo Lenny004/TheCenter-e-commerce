@@ -17,6 +17,14 @@ export async function findAll() {
   });
 }
 
+export async function findBySellerId(sellerId) {
+  return prisma.product.findMany({
+    where: { sellerId },
+    orderBy: { id: 'desc' },
+    include: includeProduct
+  });
+}
+
 export async function findById(id) {
   return prisma.product.findUnique({
     where: { id },

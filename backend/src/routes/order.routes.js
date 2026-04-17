@@ -10,8 +10,8 @@ const wrap = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch
 
 const router = Router();
 
-router.get('/', verifyToken, authorize('admin'), wrap(orderController.getAll));
-router.get('/:id', verifyToken, authorize('admin'), wrap(orderController.getById));
-router.put('/:id', verifyToken, authorize('admin'), wrap(orderController.update));
+router.get('/', verifyToken, authorize('admin', 'vendedor'), wrap(orderController.getAll));
+router.get('/:id', verifyToken, authorize('admin', 'vendedor'), wrap(orderController.getById));
+router.put('/:id', verifyToken, authorize('admin', 'vendedor'), wrap(orderController.update));
 
 export default router;

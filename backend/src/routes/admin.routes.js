@@ -10,6 +10,6 @@ const wrap = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch
 
 const router = Router();
 
-router.get('/dashboard', verifyToken, authorize('admin'), wrap(adminController.dashboard));
+router.get('/dashboard', verifyToken, authorize('admin', 'vendedor'), wrap(adminController.dashboard));
 
 export default router;

@@ -12,6 +12,14 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
+/**
+ * Determina el tipo de usuario numérico a partir del rol en base de datos.
+ * 1 = área pública (cliente). 2 = área privada (administración / vendedor).
+ */
+function userTypeFromRol(rol) {
+    return rol === 'cliente' ? 1 : 2;
+}
+
 // ── REGISTRO ────────────────────────────────────────────────────────────────
 // Controlador para POST /api/auth/register
 
@@ -38,7 +46,13 @@ export async function register(req, res) {
 
         res.status(201).json({
             message: 'Usuario creado exitosamente.',
-            user: { id: user.id, name: user.name, email: user.email, rol: user.rol }
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                rol: user.rol,
+                userType: userTypeFromRol(user.rol)
+            }
         });
     } catch (err) {
         if (err.code === 'P2002') {
@@ -50,6 +64,8 @@ export async function register(req, res) {
 
 // ── LOGIN ───────────────────────────────────────────────────────────────────
 // Controlador para POST /api/auth/login
+// Valida credenciales, calcula el tipo de usuario (1 = área pública, 2 = área privada)
+// y devuelve token + usuario en el mismo formato estructural que el registro (objeto user).
 
 export async function login(req, res) {
     const { email, password } = req.body;
@@ -71,14 +87,22 @@ export async function login(req, res) {
         return res.status(401).json({ error: 'Credenciales incorrectas.' });
     }
 
+    const userType = userTypeFromRol(user.rol);
+
     const token = jwt.sign(
-        { id: user.id, email: user.email, rol: user.rol },
+        { id: user.id, email: user.email, rol: user.rol, userType },
         process.env.JWT_SECRET,
         { expiresIn: '7d' }
     );
 
     res.json({
         token,
-        user: { id: user.id, name: user.name, email: user.email, rol: user.rol }
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            rol: user.rol,
+            userType
+        }
     });
 }

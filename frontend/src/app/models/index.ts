@@ -44,6 +44,8 @@ export interface Product {
 
   category?: Category;
   seller?: User;
+  /** Presente cuando el API incluye relaciones (detalle / admin) */
+  stock?: Stock[];
 }
 
 // ── Stock ───────────────────────────────────────────────────────
