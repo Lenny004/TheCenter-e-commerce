@@ -20,6 +20,7 @@ export class RegisterComponent {
   confirmPassword = '';
   rol: UserRole = 'cliente';
   errorMsg = '';
+  submitting = false;
 
   constructor(
     private authService: AuthService,
@@ -29,8 +30,16 @@ export class RegisterComponent {
   onSubmit(): void {
     this.errorMsg = '';
 
-    if (!this.name || !this.email || !this.password) {
+    const name = this.name.trim();
+    const email = this.email.trim().toLowerCase();
+    const phone = this.phone.trim();
+
+    if (!name || !email || !this.password) {
       this.errorMsg = 'Los campos obligatorios deben completarse.';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.errorMsg = 'Introduce un correo electrónico válido.';
       return;
     }
     if (this.password.length < 8) {
@@ -42,18 +51,25 @@ export class RegisterComponent {
       return;
     }
 
-    this.authService.register({
-      name: this.name,
-      email: this.email,
-      phone: this.phone || undefined,
-      password: this.password,
-      rol: this.rol
-    }).subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: (err: HttpErrorResponse) => {
-        const body = err.error as { error?: string } | undefined;
-        this.errorMsg = body?.error ?? 'No se pudo crear la cuenta.';
-      }
-    });
+    this.submitting = true;
+    this.authService
+      .register({
+        name,
+        email,
+        phone: phone || undefined,
+        password: this.password,
+        rol: this.rol
+      })
+      .subscribe({
+        next: () =>
+          this.router.navigate(['/login'], {
+            queryParams: { registro: 'ok' }
+          }),
+        error: (err: HttpErrorResponse) => {
+          this.submitting = false;
+          const body = err.error as { error?: string } | undefined;
+          this.errorMsg = body?.error ?? 'No se pudo crear la cuenta.';
+        }
+      });
   }
 }

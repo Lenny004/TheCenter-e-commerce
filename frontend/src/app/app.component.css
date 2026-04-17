@@ -1,5 +1,5 @@
 /* ============================================================================
-   The Center — Estilos del componente raíz (layout)
+   The Center — Layout principal (cabecera, pie)
    ============================================================================ */
 
 :host {
@@ -8,98 +8,226 @@
   min-height: 100vh;
 }
 
-/* ── Header ───────────────────────────────────────────────────── */
+/* ── Cabecera ─────────────────────────────────────────────────── */
 
 .header {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  padding: var(--spacing-md) 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(180deg, #e01010 0%, var(--color-primary) 100%);
+  color: var(--color-surface);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.header__container {
+.header__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-md);
+  min-height: 3.75rem;
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
 }
 
-.header__logo {
-  width: 3rem;
-  height: 3rem;
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.header__logo-link {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.12);
+  transition: background var(--transition-fast);
 }
 
-.header__logo img {
-  width: 100%;
-  height: 100%;
+.header__logo-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.header__logo-img {
+  width: 1.75rem;
+  height: 1.75rem;
   object-fit: contain;
+}
+
+.header__sitename {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-surface);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.header__sitename:hover {
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .header__nav {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--spacing-lg);
+  justify-content: flex-end;
+  gap: var(--spacing-xs) var(--spacing-sm);
 }
 
-.header__nav a {
-  color: var(--color-gray-300);
-  font-weight: 500;
-  font-size: 0.9rem;
+.header__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: color var(--transition-fast);
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
 }
 
-.header__nav a:hover,
-.header__nav a.active {
-  color: var(--color-white);
+.header__link:hover {
+  color: var(--color-surface);
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/* ── Main ─────────────────────────────────────────────────────── */
+.header__link--active {
+  color: var(--color-surface);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.header__link--with-icon .material-symbols-outlined {
+  font-size: 1.25rem;
+  opacity: 0.95;
+}
+
+.header__link--panel {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.header__link--panel:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.header__link-label {
+  display: inline;
+}
+
+.header__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-surface);
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.header__cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  color: #c40a0a;
+}
+
+.header__logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.header__logout:hover {
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--color-surface);
+}
+
+.header__logout .material-symbols-outlined {
+  font-size: 1.125rem;
+}
+
+/* ── Contenido ───────────────────────────────────────────────── */
 
 .main {
   flex: 1;
 }
 
-/* ── Footer ───────────────────────────────────────────────────── */
+/* ── Pie ────────────────────────────────────────────────────── */
 
 .footer {
-  background-color: var(--color-gray-800);
-  color: var(--color-gray-400);
+  background: var(--color-background-dark);
+  color: var(--color-text-muted);
   padding: var(--spacing-lg) 0;
   text-align: center;
   font-size: 0.85rem;
 }
 
 .footer p {
-  color: var(--color-gray-400);
   margin: 0;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-/* ── Responsive ───────────────────────────────────────────────── */
+/* ── Responsive ─────────────────────────────────────────────── */
 
-@media (max-width: 768px) {
-  .header__nav {
-    gap: var(--spacing-md);
-  }
-
-  .header__nav a {
-    font-size: 0.8rem;
-  }
-
-  .header__logo {
-    font-size: 1.25rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .header__container {
+@media (max-width: 640px) {
+  .header__inner {
     flex-direction: column;
-    gap: var(--spacing-sm);
+    align-items: stretch;
+  }
+
+  .header__brand {
+    justify-content: center;
+  }
+
+  .header__nav {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .header__link--with-icon .header__link-label,
+  .header__link--panel .header__link-label,
+  .header__logout .header__link-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .header__link--with-icon,
+  .header__link--panel,
+  .header__logout {
+    position: relative;
   }
 }

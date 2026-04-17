@@ -3,7 +3,7 @@
 // ============================================================================
 
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -14,13 +14,33 @@ import { AuthService } from './services/auth.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  /** Título de la aplicación */
   titulo = 'The Center';
 
-  constructor(private auth: AuthService) {}
+  constructor(
+    readonly auth: AuthService,
+    private router: Router
+  ) {}
 
-  /** Muestra el enlace al panel cuando el usuario es de área privada (tipo 2) */
+  /** Invitados y clientes: enlace a la tienda (carrito). Staff no lo usa en cabecera. */
+  showCartInHeader(): boolean {
+    return !this.auth.isLoggedIn() || this.auth.getUser()?.rol === 'cliente';
+  }
+
+  /** Solo clientes autenticados: acceso al perfil */
+  showProfileLink(): boolean {
+    return this.auth.isLoggedIn() && this.auth.getUser()?.rol === 'cliente';
+  }
+
   showPrivateAreaLink(): boolean {
     return this.auth.isPrivateAreaUser();
+  }
+
+  privateAreaNavLabel(): string {
+    return this.auth.isVendor() ? 'Panel' : 'Admin';
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/']);
   }
 }

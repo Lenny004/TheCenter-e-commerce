@@ -107,8 +107,14 @@
         </select>
       </div>
       <div class="admin-form__group">
-        <label for="p-seller">Vendedor *</label>
-        <select id="p-seller" name="seller_id" [(ngModel)]="form.seller_id" required>
+        <label for="p-seller">{{ auth.isVendor() ? 'Vendedor (tu cuenta)' : 'Vendedor *' }}</label>
+        <select
+          id="p-seller"
+          name="seller_id"
+          [(ngModel)]="form.seller_id"
+          [disabled]="auth.isVendor()"
+          required
+        >
           @for (s of sellers; track s.id) {
             <option [ngValue]="s.id">{{ s.name }}</option>
           }

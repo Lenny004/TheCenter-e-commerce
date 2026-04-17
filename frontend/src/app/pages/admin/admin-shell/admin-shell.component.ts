@@ -4,6 +4,7 @@
 
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-admin-shell',
@@ -14,6 +15,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 })
 export class AdminShellComponent {
   navOpen = false;
+
+  constructor(readonly auth: AuthService) {}
 
   toggleNav(): void {
     this.navOpen = !this.navOpen;

@@ -35,6 +35,24 @@ interface LoginResponse {
 
 const USER_KEY = 'user';
 
+/** Asegura userType numérico 1|2; si falta o es inválido, se infiere del rol. */
+export function normalizeSessionUser(
+  raw: Pick<UserSession, 'id' | 'name' | 'email' | 'rol'> & { userType?: unknown }
+): UserSession {
+  const rol = raw.rol;
+  let userType = raw.userType != null ? Number(raw.userType) : NaN;
+  if (userType !== 1 && userType !== 2) {
+    userType = rol === 'cliente' ? 1 : 2;
+  }
+  return {
+    id: raw.id,
+    name: raw.name,
+    email: raw.email,
+    rol,
+    userType: userType as UserType
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(private http: HttpClient) {}
@@ -48,8 +66,9 @@ export class AuthService {
   }
 
   saveSession(token: string, user: UserSession): void {
+    const normalized = normalizeSessionUser(user);
     localStorage.setItem('token', token);
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    localStorage.setItem(USER_KEY, JSON.stringify(normalized));
   }
 
   getToken(): string | null {
@@ -61,11 +80,7 @@ export class AuthService {
     if (!raw) return null;
     try {
       const u = JSON.parse(raw) as UserSession;
-      // Compatibilidad con sesiones anteriores sin userType: se infiere del rol
-      if (u.userType == null && u.rol) {
-        u.userType = u.rol === 'cliente' ? 1 : 2;
-      }
-      return u;
+      return normalizeSessionUser(u);
     } catch {
       return null;
     }
@@ -84,8 +99,15 @@ export class AuthService {
     return this.getUser()?.rol === 'admin';
   }
 
+  /** Rol vendedor (gestión de catálogo propio en el panel) */
+  isVendor(): boolean {
+    return this.getUser()?.rol === 'vendedor';
+  }
+
   /** Indica si el usuario debe usar el área privada (panel / gestión) */
   isPrivateAreaUser(): boolean {
-    return this.getUser()?.userType === 2;
+    const u = this.getUser();
+    if (!u) return false;
+    return u.userType === 2 || (u.rol !== 'cliente' && u.rol != null);
   }
 }

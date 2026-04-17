@@ -36,9 +36,9 @@ export class ProductService {
     );
   }
 
-  /** Catálogo admin: no enmascara errores HTTP */
+  /** Listado del panel (admin: todos; vendedor: solo sus productos) */
   getProductsAdmin(): Observable<Product[]> {
-    return this.http.get<Product[]>(API);
+    return this.http.get<Product[]>(`${API}/panel`);
   }
 
   getProductById(id: number): Observable<Product | undefined> {

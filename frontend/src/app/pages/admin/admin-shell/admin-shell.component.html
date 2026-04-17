@@ -23,7 +23,7 @@
       <img src="assets/brand-location.svg" alt="" class="admin-shell__logo" width="32" height="32" />
       <div>
         <p class="admin-shell__kicker">The Center</p>
-        <p class="admin-shell__title">Administración</p>
+        <p class="admin-shell__title">{{ auth.isVendor() ? 'Panel vendedor' : 'Administración' }}</p>
       </div>
     </div>
 
@@ -38,14 +38,16 @@
         <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
         Resumen
       </a>
-      <a routerLink="/admin/categorias" routerLinkActive="admin-shell__link--active" class="admin-shell__link" (click)="closeNav()">
-        <span class="material-symbols-outlined" aria-hidden="true">category</span>
-        Categorías
-      </a>
-      <a routerLink="/admin/tallas" routerLinkActive="admin-shell__link--active" class="admin-shell__link" (click)="closeNav()">
-        <span class="material-symbols-outlined" aria-hidden="true">straighten</span>
-        Tallas
-      </a>
+      @if (auth.isAdmin()) {
+        <a routerLink="/admin/categorias" routerLinkActive="admin-shell__link--active" class="admin-shell__link" (click)="closeNav()">
+          <span class="material-symbols-outlined" aria-hidden="true">category</span>
+          Categorías
+        </a>
+        <a routerLink="/admin/tallas" routerLinkActive="admin-shell__link--active" class="admin-shell__link" (click)="closeNav()">
+          <span class="material-symbols-outlined" aria-hidden="true">straighten</span>
+          Tallas
+        </a>
+      }
       <a routerLink="/admin/productos" routerLinkActive="admin-shell__link--active" class="admin-shell__link" (click)="closeNav()">
         <span class="material-symbols-outlined" aria-hidden="true">inventory_2</span>
         Productos
@@ -54,10 +56,12 @@
         <span class="material-symbols-outlined" aria-hidden="true">local_shipping</span>
         Pedidos
       </a>
-      <a routerLink="/admin/usuarios" routerLinkActive="admin-shell__link--active" class="admin-shell__link" (click)="closeNav()">
-        <span class="material-symbols-outlined" aria-hidden="true">group</span>
-        Usuarios
-      </a>
+      @if (auth.isAdmin()) {
+        <a routerLink="/admin/usuarios" routerLinkActive="admin-shell__link--active" class="admin-shell__link" (click)="closeNav()">
+          <span class="material-symbols-outlined" aria-hidden="true">group</span>
+          Usuarios
+        </a>
+      }
     </nav>
 
     <a routerLink="/" class="admin-shell__back" (click)="closeNav()">

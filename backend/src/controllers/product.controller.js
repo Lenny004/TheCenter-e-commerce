@@ -26,11 +26,23 @@ export async function getAll(_req, res) {
   res.json(rows.map(productOut));
 }
 
+/** Listado para el panel: el administrador ve todo; el vendedor solo sus productos. */
+export async function getPanelList(req, res) {
+  const rows =
+    req.user.rol === 'admin'
+      ? await productService.findAll()
+      : await productService.findBySellerId(req.user.id);
+  res.json(rows.map(productOut));
+}
+
 export async function getById(req, res) {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) return res.status(400).json({ error: 'ID inválido.' });
   const row = await productService.findById(id);
   if (!row) return res.status(404).json({ error: 'Producto no encontrado.' });
+  if (req.user?.rol === 'vendedor' && row.sellerId !== req.user.id) {
+    return res.status(403).json({ error: 'No tiene acceso a este producto.' });
+  }
   res.json(productOut(row));
 }
 
@@ -38,7 +50,10 @@ export async function create(req, res) {
   const name = String(req.body?.name ?? '').trim();
   const price = Number(req.body?.price);
   const categoryId = Number(req.body?.category_id ?? req.body?.categoryId);
-  const sellerId = Number(req.body?.seller_id ?? req.body?.sellerId);
+  let sellerId = Number(req.body?.seller_id ?? req.body?.sellerId);
+  if (req.user.rol === 'vendedor') {
+    sellerId = req.user.id;
+  }
   let gender = req.body?.gender;
   if (gender === '' || gender === null) gender = null;
   const image = req.body?.image != null ? String(req.body.image).trim() || null : null;
@@ -96,10 +111,17 @@ export async function update(req, res) {
   const existing = await productService.findById(id);
   if (!existing) return res.status(404).json({ error: 'Producto no encontrado.' });
 
+  if (req.user.rol === 'vendedor' && existing.sellerId !== req.user.id) {
+    return res.status(403).json({ error: 'No puede editar este producto.' });
+  }
+
   const name = String(req.body?.name ?? '').trim();
   const price = Number(req.body?.price);
   const categoryId = Number(req.body?.category_id ?? req.body?.categoryId);
-  const sellerId = Number(req.body?.seller_id ?? req.body?.sellerId);
+  let sellerId = Number(req.body?.seller_id ?? req.body?.sellerId);
+  if (req.user.rol === 'vendedor') {
+    sellerId = req.user.id;
+  }
   let gender = req.body?.gender;
   if (gender === '' || gender === null) gender = null;
   const image = req.body?.image != null ? String(req.body.image).trim() || null : null;
@@ -153,6 +175,11 @@ export async function update(req, res) {
 export async function remove(req, res) {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) return res.status(400).json({ error: 'ID inválido.' });
+  const existing = await productService.findById(id);
+  if (!existing) return res.status(404).json({ error: 'Producto no encontrado.' });
+  if (req.user.rol === 'vendedor' && existing.sellerId !== req.user.id) {
+    return res.status(403).json({ error: 'No puede eliminar este producto.' });
+  }
   try {
     await productService.deleteProduct(id);
     res.status(204).send();

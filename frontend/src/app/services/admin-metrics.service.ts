@@ -11,8 +11,11 @@ export interface AdminDashboardMetrics {
   totalSales: number;
   lowStock: number;
   pendingOrders: number;
-  totalUsers: number;
+  /** Solo administrador; null en vista vendedor */
+  totalUsers: number | null;
   lowStockThreshold: number;
+  /** true cuando las métricas están acotadas al vendedor autenticado */
+  sellerMode?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })

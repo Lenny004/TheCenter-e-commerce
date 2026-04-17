@@ -5,7 +5,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
-import { AdminMetricsService } from '../../../services/admin-metrics.service';
+import { AdminMetricsService, AdminDashboardMetrics } from '../../../services/admin-metrics.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -15,16 +16,20 @@ import { AdminMetricsService } from '../../../services/admin-metrics.service';
   styleUrl: './admin-dashboard.component.css'
 })
 export class AdminDashboardComponent implements OnInit {
-  metrics = {
+  metrics: AdminDashboardMetrics = {
     totalSales: 0,
     lowStock: 0,
     pendingOrders: 0,
     totalUsers: 0,
-    lowStockThreshold: 5
+    lowStockThreshold: 5,
+    sellerMode: false
   };
   errorMsg: string | null = null;
 
-  constructor(private adminMetrics: AdminMetricsService) {}
+  constructor(
+    private adminMetrics: AdminMetricsService,
+    readonly auth: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.adminMetrics.getDashboard().subscribe({

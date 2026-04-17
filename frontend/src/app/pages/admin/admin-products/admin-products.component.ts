@@ -11,6 +11,7 @@ import { ProductService } from '../../../services/product.service';
 import { CategoryService } from '../../../services/category.service';
 import { SizeService } from '../../../services/size.service';
 import { UserAdminService } from '../../../services/user-admin.service';
+import { AuthService } from '../../../services/auth.service';
 import { AdminModalComponent } from '../../../components/admin-modal/admin-modal.component';
 
 @Component({
@@ -55,7 +56,8 @@ export class AdminProductsComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private sizeService: SizeService,
-    private userAdminService: UserAdminService
+    private userAdminService: UserAdminService,
+    readonly auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +65,32 @@ export class AdminProductsComponent implements OnInit {
   }
 
   reloadLists(): void {
+    const u = this.auth.getUser();
+    if (this.auth.isVendor() && u) {
+      forkJoin({
+        products: this.productService.getProductsAdmin(),
+        categories: this.categoryService.getCategories(),
+        sizes: this.sizeService.getSizes()
+      }).subscribe({
+        next: ({ products, categories, sizes }) => {
+          this.products = products;
+          this.categories = categories;
+          this.sizes = sizes;
+          this.sellers = [
+            {
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              rol: 'vendedor',
+              phone: null
+            }
+          ];
+        },
+        error: (err) => this.setError(err)
+      });
+      return;
+    }
+
     forkJoin({
       products: this.productService.getProductsAdmin(),
       categories: this.categoryService.getCategories(),
@@ -73,7 +101,7 @@ export class AdminProductsComponent implements OnInit {
         this.products = products;
         this.categories = categories;
         this.sizes = sizes;
-        this.sellers = users.filter((u) => u.rol === 'vendedor');
+        this.sellers = users.filter((x) => x.rol === 'vendedor');
       },
       error: (err) => this.setError(err)
     });

@@ -2,14 +2,14 @@
 // Login — Pantalla de inicio de sesión
 // ============================================================================
 // Valida campos, llama al servicio de autenticación y redirige según userType
-// (1 = tienda pública, 2 = panel privado). Los errores HTTP se muestran igual
+// (1 = tienda pública, 2 = área privada). Los errores HTTP se muestran igual
 // que en el flujo de registro (mensaje desde el cuerpo de la respuesta).
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, normalizeSessionUser, UserSession } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,10 +18,12 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   email = '';
   password = '';
   errorMsg = '';
+  successMsg = '';
+  submitting = false;
 
   constructor(
     private authService: AuthService,
@@ -29,23 +31,34 @@ export class LoginComponent {
     private route: ActivatedRoute
   ) {}
 
+  ngOnInit(): void {
+    if (this.route.snapshot.queryParamMap.get('registro') === 'ok') {
+      this.successMsg = 'Cuenta creada. Inicia sesión con tu correo y contraseña.';
+    }
+  }
+
   onSubmit(): void {
     this.errorMsg = '';
+    this.successMsg = '';
 
-    if (!this.email || !this.password) {
+    const email = this.email.trim();
+    const password = this.password;
+    if (!email || !password) {
       this.errorMsg = 'Por favor completa todos los campos.';
       return;
     }
 
-    this.authService.login(this.email, this.password).subscribe({
+    this.submitting = true;
+    this.authService.login(email, password).subscribe({
       next: (res) => {
-        // Persiste la sesión del mismo modo que espera el resto de la aplicación
-        this.authService.saveSession(res.token, res.user);
-        // Redirige según el tipo de usuario: 1 = tienda pública, 2 = área privada
-        const target = this.resolveRedirect(res.user.userType);
+        this.submitting = false;
+        const user = normalizeSessionUser(res.user);
+        this.authService.saveSession(res.token, user);
+        const target = this.resolveRedirect(user);
         this.router.navigateByUrl(target);
       },
       error: (err: HttpErrorResponse) => {
+        this.submitting = false;
         const body = err.error as { error?: string } | undefined;
         this.errorMsg = body?.error ?? 'Credenciales incorrectas. Intenta de nuevo.';
       }
@@ -54,14 +67,15 @@ export class LoginComponent {
 
   /**
    * Devuelve la ruta de destino tras un login correcto.
-   * Respeta ?next= si existe y el usuario tiene permiso para esa URL.
+   * Usa el usuario ya normalizado (userType + rol). Respeta ?next= para staff.
    */
-  private resolveRedirect(userType: 1 | 2): string {
+  private resolveRedirect(user: UserSession): string {
+    const isStaff = user.userType === 2 || user.rol !== 'cliente';
     const next = this.route.snapshot.queryParamMap.get('next');
-    if (next && next.startsWith('/') && userType === 2) {
+    if (next && next.startsWith('/') && isStaff) {
       return next;
     }
-    if (userType === 2) {
+    if (isStaff) {
       return '/admin';
     }
     return '/';

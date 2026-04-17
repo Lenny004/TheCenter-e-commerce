@@ -4,6 +4,7 @@
 
 import { Routes } from '@angular/router';
 import { adminGuard } from './guards/admin.guard';
+import { adminOnlyGuard } from './guards/admin-only.guard';
 
 export const routes: Routes = [
   {
@@ -67,12 +68,14 @@ export const routes: Routes = [
       },
       {
         path: 'categorias',
+        canActivate: [adminOnlyGuard],
         loadComponent: () =>
           import('./pages/admin/admin-categories/admin-categories.component').then(m => m.AdminCategoriesComponent),
         title: 'The Center — Categorías'
       },
       {
         path: 'tallas',
+        canActivate: [adminOnlyGuard],
         loadComponent: () =>
           import('./pages/admin/admin-sizes/admin-sizes.component').then(m => m.AdminSizesComponent),
         title: 'The Center — Tallas'
@@ -91,6 +94,7 @@ export const routes: Routes = [
       },
       {
         path: 'usuarios',
+        canActivate: [adminOnlyGuard],
         loadComponent: () =>
           import('./pages/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent),
         title: 'The Center — Usuarios'

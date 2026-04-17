@@ -29,6 +29,9 @@ export async function register(req, res) {
     if (!name || !email || !password) {
         return res.status(400).json({ error: 'Nombre, email y contraseña son obligatorios.' });
     }
+    if (String(password).length < 8) {
+        return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres.' });
+    }
 
     // Costo del hash bcrypt (10 es el valor habitual recomendado)
     const hashedPassword = await bcrypt.hash(password, 10);
