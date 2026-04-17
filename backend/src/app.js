@@ -29,7 +29,11 @@ app.use(helmet());
 /** Parseo de JSON y datos URL-encoded */
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
+app.use('/uploads', (_req, res, next) => {
+  // Permite que frontend en otro origen cargue imágenes estáticas.
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+}, express.static(path.resolve(process.cwd(), 'uploads')));
 
 /** CORS — Orígenes permitidos desde variable de entorno */
 app.use(cors({

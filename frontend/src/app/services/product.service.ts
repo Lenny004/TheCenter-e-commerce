@@ -34,14 +34,17 @@ export class ProductService {
   resolveImageUrl(image: string | null | undefined): string | null {
     const raw = String(image ?? '').trim();
     if (!raw) return null;
-    if (/^https?:\/\//i.test(raw) || raw.startsWith('data:') || raw.startsWith('blob:')) {
-      return raw;
+
+    // Normaliza rutas guardadas en Windows (\) para que el navegador las entienda.
+    const normalized = raw.replace(/\\/g, '/');
+
+    if (/^https?:\/\//i.test(normalized) || normalized.startsWith('data:') || normalized.startsWith('blob:')) {
+      return normalized;
     }
+
     const directBase = String(environment.apiDirectBase || '').replace(/\/+$/, '');
-    if (raw.startsWith('/')) {
-      return directBase ? `${directBase}${raw}` : raw;
-    }
-    return directBase ? `${directBase}/${raw}` : raw;
+    const path = normalized.startsWith('/') ? normalized : `/${normalized}`;
+    return directBase ? `${directBase}${path}` : path;
   }
 
   getProducts(): Observable<Product[]> {
