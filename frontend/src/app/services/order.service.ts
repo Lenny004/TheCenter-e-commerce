@@ -25,4 +25,9 @@ export class OrderService {
   updateOrderStatus(id: number, status: OrderStatus): Observable<Order> {
     return this.http.put<Order>(`${API}/${id}`, { status });
   }
+
+  /** Solo administradores (API rechaza a vendedores) */
+  deleteOrder(id: number): Observable<void> {
+    return this.http.delete<void>(`${API}/${id}`);
+  }
 }

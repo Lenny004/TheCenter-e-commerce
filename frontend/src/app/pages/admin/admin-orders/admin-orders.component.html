@@ -44,6 +44,16 @@
                 <button type="button" class="admin-icon-btn" (click)="openEdit(order)" title="Editar estado">
                   <span class="material-symbols-outlined">edit</span>
                 </button>
+                @if (auth.isAdmin()) {
+                  <button
+                    type="button"
+                    class="admin-icon-btn admin-icon-btn--danger"
+                    title="Eliminar pedido"
+                    (click)="confirmDelete(order)"
+                  >
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                }
                 <button type="button" class="ao-icon-btn" title="Ver detalle" (click)="toggleDetails(order.id)">
                   <span class="material-symbols-outlined">
                     {{ expandedOrderId === order.id ? 'expand_less' : 'expand_more' }}
@@ -121,5 +131,21 @@
         </button>
       </div>
     </form>
+  </app-admin-modal>
+}
+
+@if (pendingDelete) {
+  <app-admin-modal
+    title="Eliminar pedido"
+    [open]="deleteModalOpen"
+    (openChange)="onDeleteModalChange($event)"
+  >
+    <p class="admin-confirm-text">
+      ¿Eliminar el pedido <strong>#{{ pendingDelete.id }}</strong>? Se borrarán también las líneas del pedido. Esta acción no se puede deshacer.
+    </p>
+    <div class="admin-form__actions">
+      <button type="button" class="admin-btn" (click)="onDeleteModalChange(false)">Cancelar</button>
+      <button type="button" class="admin-btn admin-btn--danger" (click)="executeDelete()">Eliminar</button>
+    </div>
   </app-admin-modal>
 }

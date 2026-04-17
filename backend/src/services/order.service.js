@@ -30,3 +30,11 @@ export async function updateStatus(id, status) {
     include: includeOrder
   });
 }
+
+/** Elimina pedido y sus líneas (solo uso administrativo). */
+export async function removeOrder(id) {
+  await prisma.$transaction([
+    prisma.orderDetail.deleteMany({ where: { orderId: id } }),
+    prisma.order.delete({ where: { id } })
+  ]);
+}

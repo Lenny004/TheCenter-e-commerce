@@ -13,5 +13,6 @@ const router = Router();
 router.get('/', verifyToken, authorize('admin', 'vendedor'), wrap(orderController.getAll));
 router.get('/:id', verifyToken, authorize('admin', 'vendedor'), wrap(orderController.getById));
 router.put('/:id', verifyToken, authorize('admin', 'vendedor'), wrap(orderController.update));
+router.delete('/:id', verifyToken, authorize('admin'), wrap(orderController.remove));
 
 export default router;

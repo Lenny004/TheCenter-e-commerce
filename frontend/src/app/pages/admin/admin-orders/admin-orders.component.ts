@@ -7,6 +7,7 @@ import { CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Order, OrderStatus } from '../../../models';
 import { OrderService } from '../../../services/order.service';
+import { AuthService } from '../../../services/auth.service';
 import { AdminModalComponent } from '../../../components/admin-modal/admin-modal.component';
 
 @Component({
@@ -28,8 +29,13 @@ export class AdminOrdersComponent implements OnInit {
   feedback: string | null = null;
   errorMsg: string | null = null;
   saving = false;
+  pendingDelete: Order | null = null;
+  deleteModalOpen = false;
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    readonly auth: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.load();
@@ -81,6 +87,30 @@ export class AdminOrdersComponent implements OnInit {
 
   toggleDetails(orderId: number): void {
     this.expandedOrderId = this.expandedOrderId === orderId ? null : orderId;
+  }
+
+  confirmDelete(order: Order): void {
+    this.pendingDelete = order;
+    this.deleteModalOpen = true;
+  }
+
+  onDeleteModalChange(open: boolean): void {
+    this.deleteModalOpen = open;
+    if (!open) this.pendingDelete = null;
+  }
+
+  executeDelete(): void {
+    if (!this.pendingDelete) return;
+    const id = this.pendingDelete.id;
+    this.deleteModalOpen = false;
+    this.pendingDelete = null;
+    this.orderService.deleteOrder(id).subscribe({
+      next: () => {
+        this.orders = this.orders.filter((o) => o.id !== id);
+        this.feedback = 'Pedido eliminado.';
+      },
+      error: (err) => this.setError(err)
+    });
   }
 
   getStatusClass(status: OrderStatus): string {
