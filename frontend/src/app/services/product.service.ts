@@ -21,6 +21,7 @@ export interface ProductWritePayload {
   price: number;
   gender?: GenderType | null;
   image?: string | null;
+  imageFile?: File | null;
   category_id: number;
   seller_id: number;
   stock: ProductStockLine[];
@@ -29,6 +30,19 @@ export interface ProductWritePayload {
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   constructor(private http: HttpClient) {}
+
+  resolveImageUrl(image: string | null | undefined): string | null {
+    const raw = String(image ?? '').trim();
+    if (!raw) return null;
+    if (/^https?:\/\//i.test(raw) || raw.startsWith('data:') || raw.startsWith('blob:')) {
+      return raw;
+    }
+    const directBase = String(environment.apiDirectBase || '').replace(/\/+$/, '');
+    if (raw.startsWith('/')) {
+      return directBase ? `${directBase}${raw}` : raw;
+    }
+    return directBase ? `${directBase}/${raw}` : raw;
+  }
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(API).pipe(
@@ -64,14 +78,27 @@ export class ProductService {
   }
 
   createProduct(data: ProductWritePayload): Observable<Product> {
-    return this.http.post<Product>(API, data);
+    return this.http.post<Product>(API, this.toFormData(data));
   }
 
   updateProduct(id: number, data: ProductWritePayload): Observable<Product> {
-    return this.http.put<Product>(`${API}/${id}`, data);
+    return this.http.put<Product>(`${API}/${id}`, this.toFormData(data));
   }
 
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${API}/${id}`);
+  }
+
+  private toFormData(data: ProductWritePayload): FormData {
+    const fd = new FormData();
+    fd.append('name', data.name);
+    fd.append('price', String(data.price));
+    fd.append('category_id', String(data.category_id));
+    fd.append('seller_id', String(data.seller_id));
+    fd.append('stock', JSON.stringify(data.stock ?? []));
+    if (data.gender) fd.append('gender', data.gender);
+    if (data.image != null) fd.append('image', data.image);
+    if (data.imageFile) fd.append('image', data.imageFile);
+    return fd;
   }
 }

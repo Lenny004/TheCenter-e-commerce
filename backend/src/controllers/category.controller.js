@@ -6,7 +6,7 @@ import prisma from '../prisma/client.js';
 import { categoryOut } from '../utils/serialize.js';
 
 export async function list(_req, res) {
-  const rows = await prisma.category.findMany({ orderBy: { name: 'asc' } });
+  const rows = await prisma.category.findMany({ orderBy: { id: 'asc' } });
   res.json(rows.map(categoryOut));
 }
 

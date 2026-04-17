@@ -31,4 +31,8 @@ export class HomeComponent implements OnInit {
   setCategory(id: number): void {
     this.activeCategory = id;
   }
+
+  imageUrl(image: string | null | undefined): string | null {
+    return this.productService.resolveImageUrl(image);
+  }
 }

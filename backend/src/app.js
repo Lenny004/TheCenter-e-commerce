@@ -7,6 +7,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import path from 'node:path';
 
 // ── Importación de rutas ────────────────────────────────────────────────────
 import authRoutes from './routes/auth.routes.js';
@@ -28,6 +29,7 @@ app.use(helmet());
 /** Parseo de JSON y datos URL-encoded */
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 
 /** CORS — Orígenes permitidos desde variable de entorno */
 app.use(cors({

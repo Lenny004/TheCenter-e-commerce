@@ -51,6 +51,7 @@ export class AdminProductsComponent implements OnInit {
   pendingDelete: Product | null = null;
   deleteModalOpen = false;
   saving = false;
+  selectedImageFile: File | null = null;
 
   constructor(
     private productService: ProductService,
@@ -109,6 +110,7 @@ export class AdminProductsComponent implements OnInit {
 
   openCreate(): void {
     this.editing = null;
+    this.selectedImageFile = null;
     this.form = {
       name: '',
       price: null,
@@ -124,8 +126,14 @@ export class AdminProductsComponent implements OnInit {
 
   openEdit(product: Product): void {
     this.editing = product;
+    this.selectedImageFile = null;
     this.clearMessages();
     this.loadingProduct(product.id);
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedImageFile = input.files?.[0] ?? null;
   }
 
   private loadingProduct(id: number): void {
@@ -201,6 +209,7 @@ export class AdminProductsComponent implements OnInit {
       price,
       gender: this.form.gender,
       image,
+      imageFile: this.selectedImageFile,
       category_id,
       seller_id,
       stock
@@ -254,6 +263,10 @@ export class AdminProductsComponent implements OnInit {
   private clearMessages(): void {
     this.feedback = null;
     this.errorMsg = null;
+  }
+
+  imageUrl(image: string | null | undefined): string | null {
+    return this.productService.resolveImageUrl(image);
   }
 
   private setError(err: unknown): void {

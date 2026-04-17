@@ -10,7 +10,7 @@
       <div class="detail__gallery">
         <div class="detail__main-image">
           @if (product.image) {
-            <img [src]="product.image" [alt]="product.name">
+            <img [src]="imageUrl(product.image)" [alt]="product.name">
           } @else {
             <span class="material-symbols-outlined detail__no-image">image</span>
           }

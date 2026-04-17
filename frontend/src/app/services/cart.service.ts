@@ -1,69 +1,81 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { CartItem, Product } from '../models';
 
-const MOCK_CART: CartItem[] = [
-  {
-    id: 1,
-    user_id: 1,
-    product_id: 1,
-    quantity: 1,
-    product: {
-      id: 1, name: 'Camiseta Urban Basic', price: 29.99, gender: 'masculino',
-      category_id: 1, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=200&fit=crop', seller_id: 1
-    }
-  },
-  {
-    id: 2,
-    user_id: 1,
-    product_id: 3,
-    quantity: 1,
-    product: {
-      id: 3, name: 'Jeans Slim Fit', price: 59.99, gender: 'masculino',
-      category_id: 2, image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&h=200&fit=crop', seller_id: 1
-    }
-  },
-  {
-    id: 3,
-    user_id: 1,
-    product_id: 6,
-    quantity: 1,
-    product: {
-      id: 6, name: 'Chaqueta Denim Classic', price: 74.99, gender: 'unisex',
-      category_id: 4, image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&h=200&fit=crop', seller_id: 1
-    }
-  }
-];
+const STORAGE_KEY = 'the-center-cart';
+const USER_ID = 1;
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private cartCount$ = new BehaviorSubject<number>(MOCK_CART.length);
+  private items: CartItem[] = this.readStoredCart();
+  private cartCount$ = new BehaviorSubject<number>(this.calculateCount(this.items));
 
-  constructor(private http: HttpClient) {}
+  private readStoredCart(): CartItem[] {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
 
-  getCart(): Observable<CartItem[]> {
-    // TODO: GET /api/cart
-    return of(MOCK_CART);
+    try {
+      const parsed = JSON.parse(raw) as CartItem[];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
   }
 
-  addToCart(productId: number, quantity: number): Observable<CartItem> {
-    // TODO: POST /api/cart
-    return of({ id: Date.now(), user_id: 1, product_id: productId, quantity } as CartItem);
+  private persistCart(items: CartItem[]): void {
+    this.items = items;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    this.cartCount$.next(this.calculateCount(items));
+  }
+
+  private calculateCount(items: CartItem[]): number {
+    return items.reduce((count, item) => count + item.quantity, 0);
+  }
+
+  getCart(): Observable<CartItem[]> {
+    return of(this.items);
+  }
+
+  addToCart(productId: number, quantity: number, product?: Product): Observable<CartItem> {
+    const existingItem = this.items.find(item => item.product_id === productId);
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+      if (product) existingItem.product = product;
+      this.persistCart([...this.items]);
+      return of(existingItem);
+    }
+
+    const newItem: CartItem = {
+      id: Date.now(),
+      user_id: USER_ID,
+      product_id: productId,
+      quantity,
+      product
+    };
+
+    this.persistCart([...this.items, newItem]);
+    return of(newItem);
   }
 
   updateQuantity(cartItemId: number, quantity: number): Observable<CartItem> {
-    // TODO: PUT /api/cart/:id
-    return of({ id: cartItemId, user_id: 1, product_id: 0, quantity } as CartItem);
+    const item = this.items.find(cartItem => cartItem.id === cartItemId);
+    if (!item) {
+      return of({ id: cartItemId, user_id: USER_ID, product_id: 0, quantity } as CartItem);
+    }
+
+    item.quantity = quantity;
+    this.persistCart([...this.items]);
+    return of(item);
   }
 
   removeItem(cartItemId: number): Observable<void> {
-    // TODO: DELETE /api/cart/:id
+    this.persistCart(this.items.filter(item => item.id !== cartItemId));
     return of(undefined);
   }
 
   checkout(): Observable<{ orderId: number }> {
-    // TODO: POST /api/cart/checkout
+    this.persistCart([]);
     return of({ orderId: Date.now() });
   }
 

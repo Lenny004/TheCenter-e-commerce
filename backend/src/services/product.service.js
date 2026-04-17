@@ -12,7 +12,7 @@ const includeProduct = {
 
 export async function findAll() {
   return prisma.product.findMany({
-    orderBy: { id: 'desc' },
+    orderBy: { id: 'asc' },
     include: includeProduct
   });
 }
@@ -20,7 +20,7 @@ export async function findAll() {
 export async function findBySellerId(sellerId) {
   return prisma.product.findMany({
     where: { sellerId },
-    orderBy: { id: 'desc' },
+    orderBy: { id: 'asc' },
     include: includeProduct
   });
 }

@@ -39,7 +39,7 @@
             <td>{{ product.id }}</td>
             <td>
               @if (product.image) {
-                <img [src]="product.image" [alt]="product.name" class="ap-table__img" />
+                <img [src]="imageUrl(product.image)" [alt]="product.name" class="ap-table__img" />
               } @else {
                 <span class="material-symbols-outlined ap-table__no-img">image</span>
               }
@@ -122,8 +122,14 @@
       </div>
     </div>
     <div class="admin-form__group">
-      <label for="p-img">URL de imagen</label>
-      <input id="p-img" name="image" type="url" [(ngModel)]="form.image" placeholder="https://..." />
+      <label for="p-img-file">Imagen del producto</label>
+      <input id="p-img-file" name="image_file" type="file" accept="image/*" (change)="onImageSelected($event)" />
+      @if (form.image && !selectedImageFile) {
+        <small>Imagen actual cargada. Seleccione un archivo para reemplazarla.</small>
+      }
+      @if (selectedImageFile) {
+        <small>Archivo seleccionado: {{ selectedImageFile.name }}</small>
+      }
     </div>
 
     <fieldset class="admin-fieldset">

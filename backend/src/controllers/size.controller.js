@@ -6,7 +6,7 @@ import prisma from '../prisma/client.js';
 import { sizeOut } from '../utils/serialize.js';
 
 export async function list(_req, res) {
-  const rows = await prisma.size.findMany({ orderBy: { size: 'asc' } });
+  const rows = await prisma.size.findMany({ orderBy: { id: 'asc' } });
   res.json(rows.map(sizeOut));
 }
 

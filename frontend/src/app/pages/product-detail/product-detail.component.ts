@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { Product, Stock } from '../../models';
 import { ProductService } from '../../services/product.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -22,7 +23,8 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -56,11 +58,17 @@ export class ProductDetailComponent implements OnInit {
   }
 
   addToCart(): void {
-    this.addedToCart = true;
-    setTimeout(() => this.addedToCart = false, 2500);
+    this.cartService.addToCart(this.product.id, this.quantity, this.product).subscribe(() => {
+      this.addedToCart = true;
+      setTimeout(() => this.addedToCart = false, 2500);
+    });
   }
 
   toggleWishlist(): void {
     this.isFavorite = !this.isFavorite;
+  }
+
+  imageUrl(image: string | null | undefined): string | null {
+    return this.productService.resolveImageUrl(image);
   }
 }

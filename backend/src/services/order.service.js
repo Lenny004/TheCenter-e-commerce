@@ -11,7 +11,7 @@ const includeOrder = {
 
 export async function findAll() {
   return prisma.order.findMany({
-    orderBy: { id: 'desc' },
+    orderBy: { id: 'asc' },
     include: includeOrder
   });
 }

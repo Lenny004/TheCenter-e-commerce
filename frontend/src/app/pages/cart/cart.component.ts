@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { CartItem } from '../../models';
 import { CartService } from '../../services/cart.service';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-cart',
@@ -14,7 +15,10 @@ import { CartService } from '../../services/cart.service';
 export class CartComponent implements OnInit {
   items: CartItem[] = [];
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private productService: ProductService
+  ) {}
 
   ngOnInit(): void {
     this.cartService.getCart().subscribe(items => {
@@ -56,5 +60,9 @@ export class CartComponent implements OnInit {
     this.cartService.checkout().subscribe(res => {
       alert(`Pedido #${res.orderId} creado exitosamente`);
     });
+  }
+
+  imageUrl(image: string | null | undefined): string | null {
+    return this.productService.resolveImageUrl(image);
   }
 }

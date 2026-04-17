@@ -9,7 +9,14 @@ import { productOut } from '../utils/serialize.js';
 const GENDERS = new Set(['masculino', 'femenino', 'unisex']);
 
 function parseStock(req) {
-  const raw = req.body.stock ?? req.body.stock_lines;
+  let raw = req.body.stock ?? req.body.stock_lines;
+  if (typeof raw === 'string') {
+    try {
+      raw = JSON.parse(raw);
+    } catch {
+      raw = [];
+    }
+  }
   if (!Array.isArray(raw)) return [];
   const map = new Map();
   for (const row of raw) {
@@ -19,6 +26,21 @@ function parseStock(req) {
     map.set(sizeId, (map.get(sizeId) || 0) + quantity);
   }
   return [...map.entries()].map(([sizeId, quantity]) => ({ sizeId, quantity }));
+}
+
+function getImageFromRequest(req, currentImage = null) {
+  if (req.file?.path) {
+    const normalized = String(req.file.path).replace(/\\/g, '/');
+    const uploadsIdx = normalized.lastIndexOf('/uploads/');
+    return uploadsIdx >= 0 ? normalized.slice(uploadsIdx) : `/${normalized}`;
+  }
+
+  if (req.body?.image != null) {
+    const value = String(req.body.image).trim();
+    return value || null;
+  }
+
+  return currentImage;
 }
 
 export async function getAll(_req, res) {
@@ -56,7 +78,7 @@ export async function create(req, res) {
   }
   let gender = req.body?.gender;
   if (gender === '' || gender === null) gender = null;
-  const image = req.body?.image != null ? String(req.body.image).trim() || null : null;
+  const image = getImageFromRequest(req, null);
 
   if (!name || name.length > 150) {
     return res.status(400).json({ error: 'Nombre obligatorio (máx. 150 caracteres).' });
@@ -86,7 +108,10 @@ export async function create(req, res) {
   const stockLines = parseStock(req);
   const sizeIds = [...new Set(stockLines.map((s) => s.sizeId))];
   if (sizeIds.length) {
-    const sizes = await prisma.size.findMany({ where: { id: { in: sizeIds } } });
+    const sizes = await prisma.size.findMany({
+      where: { id: { in: sizeIds } },
+      orderBy: { id: 'asc' }
+    });
     if (sizes.length !== sizeIds.length) {
       return res.status(400).json({ error: 'Una o más tallas no existen.' });
     }
@@ -124,7 +149,7 @@ export async function update(req, res) {
   }
   let gender = req.body?.gender;
   if (gender === '' || gender === null) gender = null;
-  const image = req.body?.image != null ? String(req.body.image).trim() || null : null;
+  const image = getImageFromRequest(req, existing.image ?? null);
 
   if (!name || name.length > 150) {
     return res.status(400).json({ error: 'Nombre obligatorio (máx. 150 caracteres).' });
@@ -154,7 +179,10 @@ export async function update(req, res) {
   const stockLines = parseStock(req);
   const sizeIds = [...new Set(stockLines.map((s) => s.sizeId))];
   if (sizeIds.length) {
-    const sizes = await prisma.size.findMany({ where: { id: { in: sizeIds } } });
+    const sizes = await prisma.size.findMany({
+      where: { id: { in: sizeIds } },
+      orderBy: { id: 'asc' }
+    });
     if (sizes.length !== sizeIds.length) {
       return res.status(400).json({ error: 'Una o más tallas no existen.' });
     }

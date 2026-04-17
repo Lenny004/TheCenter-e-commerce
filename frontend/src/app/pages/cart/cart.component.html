@@ -24,7 +24,7 @@
           <article class="cart__item">
             <a [routerLink]="'/producto/' + item.product_id" class="cart__item-image">
               @if (item.product?.image) {
-                <img [src]="item.product?.image" [alt]="item.product?.name">
+                <img [src]="imageUrl(item.product?.image)" [alt]="item.product?.name">
               } @else {
                 <span class="material-symbols-outlined cart__item-no-img">image</span>
               }
