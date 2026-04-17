@@ -1,20 +1,26 @@
 <section class="admin-dashboard container">
-  <h1>Panel de Administración</h1>
+  <h1>Panel de administración</h1>
+
+  @if (errorMsg) {
+    <p class="admin-feedback admin-feedback--error">{{ errorMsg }}</p>
+  }
 
   <div class="admin-dashboard__metrics">
     <div class="metric-card">
       <span class="material-symbols-outlined">payments</span>
-      <h3>Ventas Totales</h3>
-      <p class="metric-card__value">{{ metrics.totalSales }}</p>
+      <h3>Ventas totales</h3>
+      <p class="metric-card__value">{{ metrics.totalSales | currency: 'USD' : 'symbol' : '1.2-2' }}</p>
+      <p class="metric-card__hint">Suma de pedidos no cancelados</p>
     </div>
     <div class="metric-card">
       <span class="material-symbols-outlined">inventory</span>
-      <h3>Stock Crítico</h3>
+      <h3>Stock bajo</h3>
       <p class="metric-card__value">{{ metrics.lowStock }}</p>
+      <p class="metric-card__hint">Líneas con cantidad &lt; {{ metrics.lowStockThreshold }}</p>
     </div>
     <div class="metric-card">
       <span class="material-symbols-outlined">pending_actions</span>
-      <h3>Pedidos Pendientes</h3>
+      <h3>Pedidos pendientes</h3>
       <p class="metric-card__value">{{ metrics.pendingOrders }}</p>
     </div>
     <div class="metric-card">
@@ -24,14 +30,27 @@
     </div>
   </div>
 
+  <h2 class="admin-dashboard__section-title">Gestión</h2>
   <div class="admin-dashboard__actions">
+    <a routerLink="/admin/categorias" class="action-card">
+      <span class="material-symbols-outlined">category</span>
+      <span>Categorías</span>
+    </a>
+    <a routerLink="/admin/tallas" class="action-card">
+      <span class="material-symbols-outlined">straighten</span>
+      <span>Tallas</span>
+    </a>
     <a routerLink="/admin/productos" class="action-card">
       <span class="material-symbols-outlined">inventory_2</span>
-      <span>Gestionar Productos</span>
+      <span>Productos</span>
     </a>
     <a routerLink="/admin/pedidos" class="action-card">
       <span class="material-symbols-outlined">local_shipping</span>
-      <span>Gestionar Pedidos</span>
+      <span>Pedidos</span>
+    </a>
+    <a routerLink="/admin/usuarios" class="action-card">
+      <span class="material-symbols-outlined">group</span>
+      <span>Usuarios</span>
     </a>
   </div>
 </section>

@@ -1,13 +1,94 @@
 // ============================================================================
-// The Center — Servicio de Productos
-// Lógica de negocio para catálogo, filtrado y gestión de productos
+// The Center — Servicio de Productos (Prisma)
 // ============================================================================
 
-// TODO: Implementar
-// - getAllProducts(filters)    → Listar productos con filtros (talla, género, categoría)
-// - getProductById(id)        → Obtener producto por ID con relaciones
-// - createProduct(data)       → Crear producto con stock por talla
-// - updateProduct(id, data)   → Actualizar producto
-// - deleteProduct(id)         → Eliminar producto (soft delete o hard delete)
+import prisma from '../prisma/client.js';
 
-export default {};
+const includeProduct = {
+  category: true,
+  seller: true,
+  stock: { include: { size: true } }
+};
+
+export async function findAll() {
+  return prisma.product.findMany({
+    orderBy: { id: 'desc' },
+    include: includeProduct
+  });
+}
+
+export async function findById(id) {
+  return prisma.product.findUnique({
+    where: { id },
+    include: includeProduct
+  });
+}
+
+/**
+ * @param {object} data
+ * @param {string} data.name
+ * @param {number} data.price
+ * @param {string|null|undefined} data.gender
+ * @param {string|null|undefined} data.image
+ * @param {number} data.categoryId
+ * @param {number} data.sellerId
+ * @param {{ sizeId: number, quantity: number }[]} data.stockLines
+ */
+export async function createProduct(data) {
+  const { stockLines, ...rest } = data;
+  return prisma.$transaction(async (tx) => {
+    const product = await tx.product.create({
+      data: {
+        name: rest.name,
+        price: rest.price,
+        gender: rest.gender ?? null,
+        image: rest.image ?? null,
+        categoryId: rest.categoryId,
+        sellerId: rest.sellerId,
+        stock: {
+          create: stockLines.map((l) => ({
+            sizeId: l.sizeId,
+            quantity: l.quantity
+          }))
+        }
+      },
+      include: includeProduct
+    });
+    return product;
+  });
+}
+
+export async function updateProduct(id, data) {
+  const { stockLines, ...rest } = data;
+  return prisma.$transaction(async (tx) => {
+    await tx.product.update({
+      where: { id },
+      data: {
+        name: rest.name,
+        price: rest.price,
+        gender: rest.gender === undefined ? undefined : rest.gender,
+        image: rest.image === undefined ? undefined : rest.image,
+        categoryId: rest.categoryId,
+        sellerId: rest.sellerId
+      }
+    });
+    await tx.stock.deleteMany({ where: { productId: id } });
+    if (stockLines?.length) {
+      await tx.stock.createMany({
+        data: stockLines.map((l) => ({
+          productId: id,
+          sizeId: l.sizeId,
+          quantity: l.quantity
+        }))
+      });
+    }
+    return tx.product.findUnique({
+      where: { id },
+      include: includeProduct
+    });
+  });
+}
+
+export async function deleteProduct(id) {
+  await prisma.product.delete({ where: { id } });
+}

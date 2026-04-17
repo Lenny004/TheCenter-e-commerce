@@ -1,18 +1,20 @@
 // ============================================================================
-// The Center — Rutas de Autenticación
+// Auth Routes — Qué hace: define las URLs del módulo de autenticación
 // ============================================================================
+// Asocia cada ruta HTTP con su controlador (p. ej. POST /register → register).
 
 import { Router } from 'express';
-// TODO: Importar controlador cuando se implemente
-// import authController from '../controllers/auth.controller.js';
-// import { authenticate } from '../middlewares/auth.middleware.js';
+import { register, login } from '../controllers/auth.controller.js';
+
+// Envuelve handlers async para que los errores lleguen al middleware de Express
+const wrapAsync = fn => (req, res, next) => fn(req, res, next).catch(next);
 
 const router = Router();
 
-// TODO: Definir rutas
-// router.post('/register', authController.register);
-// router.post('/login', authController.login);
-// router.post('/refresh', authController.refresh);
-// router.get('/profile', authenticate, authController.profile);
+// POST /api/auth/register  →  crea un nuevo usuario
+router.post('/register', wrapAsync(register));
+
+// POST /api/auth/login  →  inicia sesión y devuelve token
+router.post('/login', wrapAsync(login));
 
 export default router;

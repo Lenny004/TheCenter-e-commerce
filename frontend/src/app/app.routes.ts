@@ -3,6 +3,7 @@
 // ============================================================================
 
 import { Routes } from '@angular/router';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -55,21 +56,46 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () =>
-      import('./pages/admin/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
-    title: 'The Center — Panel Admin'
-    // TODO: Agregar guard de autenticación y rol admin
-  },
-  {
-    path: 'admin/productos',
-    loadComponent: () =>
-      import('./pages/admin/admin-products/admin-products.component').then(m => m.AdminProductsComponent),
-    title: 'The Center — Gestión de Productos'
-  },
-  {
-    path: 'admin/pedidos',
-    loadComponent: () =>
-      import('./pages/admin/admin-orders/admin-orders.component').then(m => m.AdminOrdersComponent),
-    title: 'The Center — Gestión de Pedidos'
+      import('./pages/admin/admin-shell/admin-shell.component').then(m => m.AdminShellComponent),
+    canActivate: [adminGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/admin/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
+        title: 'The Center — Panel Admin'
+      },
+      {
+        path: 'categorias',
+        loadComponent: () =>
+          import('./pages/admin/admin-categories/admin-categories.component').then(m => m.AdminCategoriesComponent),
+        title: 'The Center — Categorías'
+      },
+      {
+        path: 'tallas',
+        loadComponent: () =>
+          import('./pages/admin/admin-sizes/admin-sizes.component').then(m => m.AdminSizesComponent),
+        title: 'The Center — Tallas'
+      },
+      {
+        path: 'productos',
+        loadComponent: () =>
+          import('./pages/admin/admin-products/admin-products.component').then(m => m.AdminProductsComponent),
+        title: 'The Center — Gestión de Productos'
+      },
+      {
+        path: 'pedidos',
+        loadComponent: () =>
+          import('./pages/admin/admin-orders/admin-orders.component').then(m => m.AdminOrdersComponent),
+        title: 'The Center — Gestión de Pedidos'
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('./pages/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent),
+        title: 'The Center — Usuarios'
+      }
+    ]
   },
   {
     path: '**',

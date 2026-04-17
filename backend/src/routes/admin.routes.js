@@ -3,16 +3,13 @@
 // ============================================================================
 
 import { Router } from 'express';
-// TODO: Importar controlador cuando se implemente
-// import adminController from '../controllers/admin.controller.js';
-// import { authenticate, authorize } from '../middlewares/auth.middleware.js';
+import * as adminController from '../controllers/admin.controller.js';
+import { verifyToken, authorize } from '../middlewares/auth.middleware.js';
+
+const wrap = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 const router = Router();
 
-// TODO: Definir rutas (solo accesibles por admin)
-// router.get('/dashboard', authenticate, authorize(['admin']), adminController.dashboard);
-// router.get('/products', authenticate, authorize(['admin']), adminController.products);
-// router.get('/orders', authenticate, authorize(['admin']), adminController.orders);
-// router.get('/users', authenticate, authorize(['admin']), adminController.users);
+router.get('/dashboard', verifyToken, authorize('admin'), wrap(adminController.dashboard));
 
 export default router;

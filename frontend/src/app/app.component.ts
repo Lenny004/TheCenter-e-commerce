@@ -4,6 +4,7 @@
 
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -15,4 +16,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 export class AppComponent {
   /** Título de la aplicación */
   titulo = 'The Center';
+
+  constructor(private auth: AuthService) {}
+
+  isAdmin(): boolean {
+    return this.auth.isAdmin();
+  }
 }

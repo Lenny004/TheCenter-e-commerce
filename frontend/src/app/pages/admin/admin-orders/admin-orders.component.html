@@ -1,5 +1,19 @@
-<section class="admin-orders container">
-  <h1>Gestión de Pedidos</h1>
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Pedidos</h1>
+      <p class="admin-page__subtitle">
+        Órdenes (<code>order</code>) y líneas (<code>order_detail</code>). El estado se alinea con el enum <code>OrderStatus</code>.
+      </p>
+    </div>
+  </header>
+
+  @if (feedback) {
+    <p class="admin-feedback admin-feedback--success" role="status">{{ feedback }}</p>
+  }
+  @if (errorMsg && !modalOpen) {
+    <p class="admin-feedback admin-feedback--error" role="alert">{{ errorMsg }}</p>
+  }
 
   <div class="ao-table-wrap">
     <table class="ao-table">
@@ -10,29 +24,27 @@
           <th>Email</th>
           <th>Total</th>
           <th>Estado</th>
-          <th>Acciones</th>
+          <th class="admin-table__actions-col">Acciones</th>
         </tr>
       </thead>
       <tbody>
         @for (order of orders; track order.id) {
           <tr>
             <td><strong>#{{ order.id }}</strong></td>
-            <td>{{ order.user?.name || 'User #' + order.user_id }}</td>
+            <td>{{ order.user?.name || 'Usuario #' + order.user_id }}</td>
             <td>{{ order.user?.email || '—' }}</td>
-            <td>{{ order.total | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td>{{ order.total | currency: 'USD' : 'symbol' : '1.2-2' }}</td>
             <td>
               <span class="ao-status" [class]="getStatusClass(order.status)">
                 {{ order.status | titlecase }}
               </span>
             </td>
             <td>
-              <div class="ao-actions">
-                <select [ngModel]="order.status" (ngModelChange)="updateStatus(order, $event)" class="ao-select">
-                  @for (s of statuses; track s) {
-                    <option [value]="s">{{ s | titlecase }}</option>
-                  }
-                </select>
-                <button class="ao-icon-btn" title="Ver detalle" (click)="toggleDetails(order.id)">
+              <div class="admin-table__actions">
+                <button type="button" class="admin-icon-btn" (click)="openEdit(order)" title="Editar estado">
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+                <button type="button" class="ao-icon-btn" title="Ver detalle" (click)="toggleDetails(order.id)">
                   <span class="material-symbols-outlined">
                     {{ expandedOrderId === order.id ? 'expand_less' : 'expand_more' }}
                   </span>
@@ -48,7 +60,7 @@
                   <table class="ao-detail-table">
                     <thead>
                       <tr>
-                        <th>Producto ID</th>
+                        <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Precio unitario</th>
                         <th>Subtotal</th>
@@ -57,10 +69,10 @@
                     <tbody>
                       @for (d of order.details; track d.id) {
                         <tr>
-                          <td>{{ d.product_id }}</td>
+                          <td>{{ d.product?.name || 'ID ' + d.product_id }}</td>
                           <td>{{ d.quantity }}</td>
-                          <td>{{ d.unit_price | currency:'USD':'symbol':'1.2-2' }}</td>
-                          <td>{{ d.quantity * d.unit_price | currency:'USD':'symbol':'1.2-2' }}</td>
+                          <td>{{ d.unit_price | currency: 'USD' : 'symbol' : '1.2-2' }}</td>
+                          <td>{{ d.quantity * d.unit_price | currency: 'USD' : 'symbol' : '1.2-2' }}</td>
                         </tr>
                       }
                     </tbody>
@@ -69,8 +81,45 @@
               </td>
             </tr>
           }
+        } @empty {
+          <tr>
+            <td colspan="6" class="admin-table__empty">No hay pedidos.</td>
+          </tr>
         }
       </tbody>
     </table>
   </div>
 </section>
+
+@if (selected) {
+  <app-admin-modal
+    title="Editar pedido"
+    [open]="modalOpen"
+    (openChange)="onOrderModalOpen($event)"
+    [wide]="true"
+  >
+    @if (errorMsg && modalOpen) {
+      <p class="admin-feedback admin-feedback--error">{{ errorMsg }}</p>
+    }
+    <p class="ao-modal-meta">
+      Pedido <strong>#{{ selected.id }}</strong> · Total
+      {{ selected.total | currency: 'USD' : 'symbol' : '1.2-2' }}
+    </p>
+    <form class="admin-form" (ngSubmit)="saveStatus()">
+      <div class="admin-form__group">
+        <label for="ord-status">Estado *</label>
+        <select id="ord-status" name="status" [(ngModel)]="formStatus" required>
+          @for (s of statuses; track s) {
+            <option [ngValue]="s">{{ s | titlecase }}</option>
+          }
+        </select>
+      </div>
+      <div class="admin-form__actions">
+        <button type="button" class="admin-btn" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="admin-btn admin-btn--primary" [disabled]="saving">
+          {{ saving ? 'Guardando…' : 'Guardar estado' }}
+        </button>
+      </div>
+    </form>
+  </app-admin-modal>
+}

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { UserRole } from '../../models';
 import { AuthService } from '../../services/auth.service';
 
@@ -29,7 +30,7 @@ export class RegisterComponent {
     this.errorMsg = '';
 
     if (!this.name || !this.email || !this.password) {
-      this.errorMsg = 'Por favor completa los campos obligatorios.';
+      this.errorMsg = 'Los campos obligatorios deben completarse.';
       return;
     }
     if (this.password.length < 8) {
@@ -49,7 +50,10 @@ export class RegisterComponent {
       rol: this.rol
     }).subscribe({
       next: () => this.router.navigate(['/login']),
-      error: () => this.errorMsg = 'Error al crear la cuenta. Intenta de nuevo.'
+      error: (err: HttpErrorResponse) => {
+        const body = err.error as { error?: string } | undefined;
+        this.errorMsg = body?.error ?? 'No se pudo crear la cuenta.';
+      }
     });
   }
 }

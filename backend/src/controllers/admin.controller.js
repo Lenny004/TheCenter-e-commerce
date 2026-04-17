@@ -1,12 +1,36 @@
 // ============================================================================
-// The Center — Controlador de Administración
-// Dashboard, métricas y gestión administrativa
+// The Center — Panel administrativo (métricas)
 // ============================================================================
 
-// TODO: Implementar lógica de administración
-// - GET /api/admin/dashboard   → Métricas: ventas totales, stock crítico, pedidos pendientes
-// - GET /api/admin/products    → Listado completo de productos con stock
-// - GET /api/admin/orders      → Todos los pedidos del sistema
-// - GET /api/admin/users       → Listado de usuarios
+import prisma from '../prisma/client.js';
 
-export default {};
+const LOW_STOCK_THRESHOLD = 5;
+
+export async function dashboard(_req, res) {
+  const [
+    salesAgg,
+    pendingOrders,
+    totalUsers,
+    lowStockLines
+  ] = await Promise.all([
+    prisma.order.aggregate({
+      _sum: { total: true },
+      where: { status: { not: 'cancelada' } }
+    }),
+    prisma.order.count({ where: { status: 'pendiente' } }),
+    prisma.user.count(),
+    prisma.stock.count({
+      where: { quantity: { lt: LOW_STOCK_THRESHOLD } }
+    })
+  ]);
+
+  const totalSales = salesAgg._sum.total != null ? Number(salesAgg._sum.total) : 0;
+
+  res.json({
+    totalSales,
+    lowStock: lowStockLines,
+    pendingOrders,
+    totalUsers,
+    lowStockThreshold: LOW_STOCK_THRESHOLD
+  });
+}

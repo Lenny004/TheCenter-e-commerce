@@ -12,6 +12,9 @@
       <a routerLink="/carrito" routerLinkActive="active">
         <span class="material-symbols-outlined">shopping_cart</span>
       </a>
+      @if (isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Admin</a>
+      }
       <a routerLink="/login" routerLinkActive="active">Entrar</a>
     </nav>
   </div>

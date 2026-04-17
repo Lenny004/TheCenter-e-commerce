@@ -1,0 +1,20 @@
+@if (open) {
+  <div
+    class="admin-modal__backdrop"
+    (click)="onBackdropClick()"
+    aria-hidden="true"
+  ></div>
+  <div class="admin-modal" role="dialog" aria-modal="true" [attr.aria-labelledby]="'admin-modal-title'">
+    <div class="admin-modal__panel" [class.admin-modal__panel--wide]="wide">
+      <header class="admin-modal__header">
+        <h2 id="admin-modal-title" class="admin-modal__title">{{ title }}</h2>
+        <button type="button" class="admin-modal__close" (click)="close()" aria-label="Cerrar">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+      </header>
+      <div class="admin-modal__body">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+}

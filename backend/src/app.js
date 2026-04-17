@@ -9,12 +9,14 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 
 // ── Importación de rutas ────────────────────────────────────────────────────
-// TODO: Importar rutas cuando se implementen
-// import productRoutes from './routes/product.routes.js';
-// import authRoutes from './routes/auth.routes.js';
-// import cartRoutes from './routes/cart.routes.js';
-// import orderRoutes from './routes/order.routes.js';
-// import adminRoutes from './routes/admin.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import categoryRoutes from './routes/category.routes.js';
+import sizeRoutes from './routes/size.routes.js';
+import productRoutes from './routes/product.routes.js';
+import orderRoutes from './routes/order.routes.js';
+import userRoutes from './routes/user.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+import { errorHandler } from './middlewares/error.middleware.js';
 
 const app = express();
 
@@ -46,7 +48,7 @@ const limiter = rateLimit({
   max: 100,                  // máximo 100 peticiones por ventana
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: 'Demasiadas peticiones. Intente más tarde.' }
+  message: { error: 'Demasiadas peticiones; debe esperarse antes de reintentar.' }
 });
 app.use('/api/', limiter);
 
@@ -61,12 +63,13 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
-// TODO: Registrar rutas cuando se implementen
-// app.use('/api/auth', authRoutes);
-// app.use('/api/products', productRoutes);
-// app.use('/api/cart', cartRoutes);
-// app.use('/api/orders', orderRoutes);
-// app.use('/api/admin', adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/sizes', sizeRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ── Manejo de errores global ────────────────────────────────────────────────
 
@@ -75,15 +78,6 @@ app.use((_req, res) => {
   res.status(404).json({ error: 'Recurso no encontrado' });
 });
 
-/** Manejador de errores centralizado */
-app.use((err, _req, res, _next) => {
-  console.error('[Error]', err.stack);
-  const statusCode = err.statusCode || 500;
-  res.status(statusCode).json({
-    error: process.env.NODE_ENV === 'production'
-      ? 'Error interno del servidor'
-      : err.message
-  });
-});
+app.use(errorHandler);
 
 export default app;

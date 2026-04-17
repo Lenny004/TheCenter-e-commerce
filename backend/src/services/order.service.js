@@ -1,12 +1,32 @@
 // ============================================================================
 // The Center — Servicio de Órdenes
-// Lógica de negocio para gestión de pedidos
 // ============================================================================
 
-// TODO: Implementar
-// - getOrdersByUserId(userId)      → Listar órdenes de un usuario
-// - getOrderById(id)               → Detalle de una orden con items
-// - updateOrderStatus(id, status)  → Actualizar estado del pedido
-// - createOrderFromCart(userId)     → Crear orden a partir del carrito
+import prisma from '../prisma/client.js';
 
-export default {};
+const includeOrder = {
+  user: true,
+  details: { include: { product: { select: { id: true, name: true } } } }
+};
+
+export async function findAll() {
+  return prisma.order.findMany({
+    orderBy: { id: 'desc' },
+    include: includeOrder
+  });
+}
+
+export async function findById(id) {
+  return prisma.order.findUnique({
+    where: { id },
+    include: includeOrder
+  });
+}
+
+export async function updateStatus(id, status) {
+  return prisma.order.update({
+    where: { id },
+    data: { status },
+    include: includeOrder
+  });
+}

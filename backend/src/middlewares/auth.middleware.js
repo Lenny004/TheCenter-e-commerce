@@ -1,30 +1,40 @@
 // ============================================================================
-// The Center — Middleware de Autenticación
-// Verifica JWT y controla acceso por roles
+// Auth Middleware — JWT y autorización por rol
 // ============================================================================
 
-// TODO: Implementar
-// - authenticate(req, res, next)     → Verificar token JWT en headers
-// - authorize(roles)(req, res, next) → Verificar que el usuario tenga el rol requerido
+import jwt from 'jsonwebtoken';
 
 /**
- * Middleware placeholder de autenticación
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- * @param {import('express').NextFunction} next
+ * Verifica Bearer JWT y adjunta `req.user` = { id, email, rol }.
  */
-export const authenticate = (req, res, next) => {
-  // TODO: Implementar verificación de JWT
-  next();
-};
+export function verifyToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Acceso denegado. Token no proporcionado.' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch {
+    return res.status(401).json({ error: 'Token inválido o expirado.' });
+  }
+}
 
 /**
- * Middleware placeholder de autorización por roles
- * @param {string[]} roles - Roles permitidos
+ * @param {...string} allowedRoles - Roles permitidos (p. ej. 'admin', 'vendedor')
  */
-export const authorize = (roles) => {
+export function authorize(...allowedRoles) {
   return (req, res, next) => {
-    // TODO: Implementar verificación de rol
+    if (!req.user) {
+      return res.status(401).json({ error: 'No autenticado.' });
+    }
+    if (!allowedRoles.includes(req.user.rol)) {
+      return res.status(403).json({ error: 'No tiene permisos para esta operación.' });
+    }
     next();
   };
-};
+}

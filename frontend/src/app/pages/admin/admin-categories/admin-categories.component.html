@@ -1,0 +1,90 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Categorías</h1>
+      <p class="admin-page__subtitle">Nombres de categoría (máx. 100 caracteres), alineados con la tabla <code>category</code>.</p>
+    </div>
+    <button type="button" class="admin-btn admin-btn--primary" (click)="openCreate()">
+      <span class="material-symbols-outlined">add</span>
+      Agregar
+    </button>
+  </header>
+
+  @if (feedback) {
+    <p class="admin-feedback admin-feedback--success" role="status">{{ feedback }}</p>
+  }
+  @if (errorMsg && !modalOpen) {
+    <p class="admin-feedback admin-feedback--error" role="alert">{{ errorMsg }}</p>
+  }
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th class="admin-table__actions-col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cat of categories; track cat.id) {
+          <tr>
+            <td>{{ cat.id }}</td>
+            <td><strong>{{ cat.name }}</strong></td>
+            <td>
+              <div class="admin-table__actions">
+                <button type="button" class="admin-icon-btn" (click)="openEdit(cat)" title="Editar">
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+                <button type="button" class="admin-icon-btn admin-icon-btn--danger" (click)="confirmDelete(cat)" title="Eliminar">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3" class="admin-table__empty">No hay categorías. Cree la primera con «Agregar».</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<app-admin-modal
+  [title]="editing ? 'Editar categoría' : 'Nueva categoría'"
+  [(open)]="modalOpen"
+>
+  @if (errorMsg && modalOpen) {
+    <p class="admin-feedback admin-feedback--error">{{ errorMsg }}</p>
+  }
+  <form class="admin-form" (ngSubmit)="save()">
+    <div class="admin-form__group">
+      <label for="cat-name">Nombre *</label>
+      <input id="cat-name" name="name" type="text" [(ngModel)]="formName" maxlength="100" required />
+    </div>
+    <div class="admin-form__actions">
+      <button type="button" class="admin-btn" (click)="closeModal()">Cancelar</button>
+      <button type="submit" class="admin-btn admin-btn--primary" [disabled]="saving">
+        {{ saving ? 'Guardando…' : 'Guardar' }}
+      </button>
+    </div>
+  </form>
+</app-admin-modal>
+
+@if (pendingDelete) {
+  <app-admin-modal
+    title="Confirmar eliminación"
+    [open]="deleteModalOpen"
+    (openChange)="onDeleteModalChange($event)"
+  >
+    <p class="admin-confirm-text">
+      ¿Eliminar la categoría <strong>{{ pendingDelete.name }}</strong>? No podrá eliminarse si hay productos asociados.
+    </p>
+    <div class="admin-form__actions">
+      <button type="button" class="admin-btn" (click)="onDeleteModalChange(false)">Cancelar</button>
+      <button type="button" class="admin-btn admin-btn--danger" (click)="executeDelete()">Eliminar</button>
+    </div>
+  </app-admin-modal>
+}

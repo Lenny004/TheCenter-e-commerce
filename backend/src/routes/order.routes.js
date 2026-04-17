@@ -3,15 +3,15 @@
 // ============================================================================
 
 import { Router } from 'express';
-// TODO: Importar controlador cuando se implemente
-// import orderController from '../controllers/order.controller.js';
-// import { authenticate, authorize } from '../middlewares/auth.middleware.js';
+import * as orderController from '../controllers/order.controller.js';
+import { verifyToken, authorize } from '../middlewares/auth.middleware.js';
+
+const wrap = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 const router = Router();
 
-// TODO: Definir rutas
-// router.get('/', authenticate, orderController.getAll);
-// router.get('/:id', authenticate, orderController.getById);
-// router.put('/:id', authenticate, authorize(['admin']), orderController.updateStatus);
+router.get('/', verifyToken, authorize('admin'), wrap(orderController.getAll));
+router.get('/:id', verifyToken, authorize('admin'), wrap(orderController.getById));
+router.put('/:id', verifyToken, authorize('admin'), wrap(orderController.update));
 
 export default router;

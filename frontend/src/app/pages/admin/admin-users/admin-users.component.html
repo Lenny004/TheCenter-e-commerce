@@ -1,0 +1,126 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Usuarios</h1>
+      <p class="admin-page__subtitle">
+        Campos alineados con la tabla <code>user</code>: nombre, teléfono, email, rol. La contraseña se almacena con hash en el servidor.
+      </p>
+    </div>
+    <button type="button" class="admin-btn admin-btn--primary" (click)="openCreate()">
+      <span class="material-symbols-outlined">person_add</span>
+      Agregar
+    </button>
+  </header>
+
+  @if (feedback) {
+    <p class="admin-feedback admin-feedback--success" role="status">{{ feedback }}</p>
+  }
+  @if (errorMsg && !modalOpen) {
+    <p class="admin-feedback admin-feedback--error" role="alert">{{ errorMsg }}</p>
+  }
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Rol</th>
+          <th class="admin-table__actions-col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of users; track u.id) {
+          <tr>
+            <td>{{ u.id }}</td>
+            <td><strong>{{ u.name }}</strong></td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.phone || '—' }}</td>
+            <td>{{ u.rol | titlecase }}</td>
+            <td>
+              <div class="admin-table__actions">
+                <button type="button" class="admin-icon-btn" (click)="openEdit(u)" title="Editar">
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+                <button type="button" class="admin-icon-btn admin-icon-btn--danger" (click)="confirmDelete(u)" title="Eliminar">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="admin-table__empty">No hay usuarios.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<app-admin-modal
+  [title]="editing ? 'Editar usuario' : 'Nuevo usuario'"
+  [(open)]="modalOpen"
+  [wide]="true"
+>
+  @if (errorMsg && modalOpen) {
+    <p class="admin-feedback admin-feedback--error">{{ errorMsg }}</p>
+  }
+  <form class="admin-form" (ngSubmit)="save()">
+    <div class="admin-form__group">
+      <label for="u-name">Nombre *</label>
+      <input id="u-name" name="name" type="text" [(ngModel)]="form.name" maxlength="100" required />
+    </div>
+    <div class="admin-form__group">
+      <label for="u-email">Email *</label>
+      <input id="u-email" name="email" type="email" [(ngModel)]="form.email" maxlength="150" required />
+    </div>
+    <div class="admin-form__group">
+      <label for="u-phone">Teléfono</label>
+      <input id="u-phone" name="phone" type="text" [(ngModel)]="form.phone" maxlength="20" />
+    </div>
+    <div class="admin-form__group">
+      <label for="u-rol">Rol *</label>
+      <select id="u-rol" name="rol" [(ngModel)]="form.rol" required>
+        @for (r of roles; track r) {
+          <option [ngValue]="r">{{ r | titlecase }}</option>
+        }
+      </select>
+    </div>
+    <div class="admin-form__group">
+      <label for="u-pwd">{{ editing ? 'Nueva contraseña (opcional)' : 'Contraseña *' }}</label>
+      <input
+        id="u-pwd"
+        name="password"
+        type="password"
+        [(ngModel)]="form.password"
+        [attr.autocomplete]="editing ? 'new-password' : 'new-password'"
+        [attr.minlength]="editing ? null : 6"
+      />
+    </div>
+    <div class="admin-form__actions">
+      <button type="button" class="admin-btn" (click)="closeModal()">Cancelar</button>
+      <button type="submit" class="admin-btn admin-btn--primary" [disabled]="saving">
+        {{ saving ? 'Guardando…' : 'Guardar' }}
+      </button>
+    </div>
+  </form>
+</app-admin-modal>
+
+@if (pendingDelete) {
+  <app-admin-modal
+    title="Confirmar eliminación"
+    [open]="deleteModalOpen"
+    (openChange)="onDeleteModalChange($event)"
+  >
+    <p class="admin-confirm-text">
+      ¿Eliminar al usuario <strong>{{ pendingDelete.name }}</strong>? Solo es posible si no tiene datos asociados.
+    </p>
+    <div class="admin-form__actions">
+      <button type="button" class="admin-btn" (click)="onDeleteModalChange(false)">Cancelar</button>
+      <button type="button" class="admin-btn admin-btn--danger" (click)="executeDelete()">Eliminar</button>
+    </div>
+  </app-admin-modal>
+}

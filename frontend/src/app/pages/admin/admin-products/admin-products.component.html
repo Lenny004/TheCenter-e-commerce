@@ -1,62 +1,26 @@
-<section class="admin-products container">
-  <div class="admin-products__header">
-    <h1>Gestión de Productos</h1>
-    <button class="ap-btn ap-btn--primary" (click)="openForm()">
-      <span class="material-symbols-outlined">add</span>
-      Nuevo Producto
-    </button>
-  </div>
-
-  <!-- Formulario de producto -->
-  @if (showForm) {
-    <div class="ap-form-card">
-      <h3>Nuevo Producto</h3>
-      <form class="ap-form" (ngSubmit)="saveProduct()">
-        <div class="ap-form__row">
-          <div class="ap-form__group">
-            <label>Nombre *</label>
-            <input type="text" [(ngModel)]="form.name" name="name" placeholder="Nombre del producto" required>
-          </div>
-          <div class="ap-form__group">
-            <label>Precio *</label>
-            <input type="number" [(ngModel)]="form.price" name="price" placeholder="0.00" step="0.01" required>
-          </div>
-        </div>
-        <div class="ap-form__row">
-          <div class="ap-form__group">
-            <label>Categoría *</label>
-            <select [(ngModel)]="form.category_id" name="category_id" required>
-              <option [ngValue]="0" disabled>Seleccionar categoría</option>
-              @for (cat of categories; track cat.id) {
-                <option [ngValue]="cat.id">{{ cat.name }}</option>
-              }
-            </select>
-          </div>
-          <div class="ap-form__group">
-            <label>Género</label>
-            <select [(ngModel)]="form.gender" name="gender">
-              <option [ngValue]="null">Sin especificar</option>
-              <option value="masculino">Masculino</option>
-              <option value="femenino">Femenino</option>
-              <option value="unisex">Unisex</option>
-            </select>
-          </div>
-        </div>
-        <div class="ap-form__group">
-          <label>URL de imagen</label>
-          <input type="text" [(ngModel)]="form.image" name="image" placeholder="https://...">
-        </div>
-        <div class="ap-form__actions">
-          <button type="button" class="ap-btn" (click)="closeForm()">Cancelar</button>
-          <button type="submit" class="ap-btn ap-btn--primary">Guardar</button>
-        </div>
-      </form>
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Productos</h1>
+      <p class="admin-page__subtitle">
+        Modelo <code>product</code> + líneas de <code>stock</code> por talla (<code>size_id</code>, <code>quantity</code>).
+      </p>
     </div>
+    <button type="button" class="admin-btn admin-btn--primary" (click)="openCreate()">
+      <span class="material-symbols-outlined">add</span>
+      Agregar
+    </button>
+  </header>
+
+  @if (feedback) {
+    <p class="admin-feedback admin-feedback--success" role="status">{{ feedback }}</p>
+  }
+  @if (errorMsg && !modalOpen) {
+    <p class="admin-feedback admin-feedback--error" role="alert">{{ errorMsg }}</p>
   }
 
-  <!-- Tabla de productos -->
-  <div class="ap-table-wrap">
-    <table class="ap-table">
+  <div class="admin-table-wrap ap-table-scroll">
+    <table class="admin-table">
       <thead>
         <tr>
           <th>ID</th>
@@ -66,7 +30,7 @@
           <th>Categoría</th>
           <th>Género</th>
           <th>Vendedor</th>
-          <th>Acciones</th>
+          <th class="admin-table__actions-col">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -75,29 +39,136 @@
             <td>{{ product.id }}</td>
             <td>
               @if (product.image) {
-                <img [src]="product.image" [alt]="product.name" class="ap-table__img">
+                <img [src]="product.image" [alt]="product.name" class="ap-table__img" />
               } @else {
                 <span class="material-symbols-outlined ap-table__no-img">image</span>
               }
             </td>
             <td><strong>{{ product.name }}</strong></td>
-            <td>{{ product.price | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td>{{ product.price | currency: 'USD' : 'symbol' : '1.2-2' }}</td>
             <td>{{ product.category?.name || '—' }}</td>
             <td>{{ product.gender ? (product.gender | titlecase) : '—' }}</td>
-            <td>{{ product.seller?.name || 'ID: ' + product.seller_id }}</td>
+            <td>{{ product.seller?.name || ('ID ' + product.seller_id) }}</td>
             <td>
-              <div class="ap-table__actions">
-                <button class="ap-icon-btn" title="Editar">
+              <div class="admin-table__actions">
+                <button type="button" class="admin-icon-btn" (click)="openEdit(product)" title="Editar">
                   <span class="material-symbols-outlined">edit</span>
                 </button>
-                <button class="ap-icon-btn ap-icon-btn--danger" title="Eliminar" (click)="deleteProduct(product.id)">
+                <button type="button" class="admin-icon-btn admin-icon-btn--danger" (click)="confirmDelete(product)" title="Eliminar">
                   <span class="material-symbols-outlined">delete</span>
                 </button>
               </div>
             </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8" class="admin-table__empty">No hay productos.</td>
           </tr>
         }
       </tbody>
     </table>
   </div>
 </section>
+
+<app-admin-modal
+  [title]="editing ? 'Editar producto' : 'Nuevo producto'"
+  [(open)]="modalOpen"
+  [wide]="true"
+>
+  @if (errorMsg && modalOpen) {
+    <p class="admin-feedback admin-feedback--error">{{ errorMsg }}</p>
+  }
+  <form class="admin-form" (ngSubmit)="save()">
+    <div class="admin-form__group">
+      <label for="p-name">Nombre *</label>
+      <input id="p-name" name="name" type="text" [(ngModel)]="form.name" maxlength="150" required />
+    </div>
+    <div class="admin-form__row">
+      <div class="admin-form__group">
+        <label for="p-price">Precio *</label>
+        <input id="p-price" name="price" type="number" [(ngModel)]="form.price" min="0" step="0.01" required />
+      </div>
+      <div class="admin-form__group">
+        <label for="p-gender">Género</label>
+        <select id="p-gender" name="gender" [(ngModel)]="form.gender">
+          @for (g of genders; track g.label) {
+            <option [ngValue]="g.value">{{ g.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="admin-form__row">
+      <div class="admin-form__group">
+        <label for="p-cat">Categoría *</label>
+        <select id="p-cat" name="category_id" [(ngModel)]="form.category_id" required>
+          @for (c of categories; track c.id) {
+            <option [ngValue]="c.id">{{ c.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="admin-form__group">
+        <label for="p-seller">Vendedor *</label>
+        <select id="p-seller" name="seller_id" [(ngModel)]="form.seller_id" required>
+          @for (s of sellers; track s.id) {
+            <option [ngValue]="s.id">{{ s.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="admin-form__group">
+      <label for="p-img">URL de imagen</label>
+      <input id="p-img" name="image" type="url" [(ngModel)]="form.image" placeholder="https://..." />
+    </div>
+
+    <fieldset class="admin-fieldset">
+      <legend>Stock por talla</legend>
+      <p class="admin-fieldset__hint">Cada fila es un registro en <code>stock</code> (talla + cantidad).</p>
+      <div class="admin-stock-rows">
+        @for (line of form.stock; track $index; let i = $index) {
+          <div class="admin-stock-row">
+            <div class="admin-form__group">
+              <label [attr.for]="'sz-' + i">Talla</label>
+              <select [id]="'sz-' + i" [(ngModel)]="line.size_id" [name]="'size_id_' + i" required>
+                @for (sz of sizes; track sz.id) {
+                  <option [ngValue]="sz.id">{{ sz.size }}</option>
+                }
+              </select>
+            </div>
+            <div class="admin-form__group">
+              <label [attr.for]="'qty-' + i">Cantidad</label>
+              <input [id]="'qty-' + i" type="number" [(ngModel)]="line.quantity" [name]="'qty_' + i" min="0" step="1" />
+            </div>
+            <button type="button" class="admin-icon-btn admin-icon-btn--danger" (click)="removeStockRow(i)" title="Quitar fila">
+              <span class="material-symbols-outlined">remove</span>
+            </button>
+          </div>
+        }
+      </div>
+      <button type="button" class="admin-btn admin-btn--ghost" (click)="addStockRow()">
+        <span class="material-symbols-outlined">add</span>
+        Añadir talla
+      </button>
+    </fieldset>
+
+    <div class="admin-form__actions">
+      <button type="button" class="admin-btn" (click)="closeModal()">Cancelar</button>
+      <button type="submit" class="admin-btn admin-btn--primary" [disabled]="saving">
+        {{ saving ? 'Guardando…' : 'Guardar' }}
+      </button>
+    </div>
+  </form>
+</app-admin-modal>
+
+@if (pendingDelete) {
+  <app-admin-modal
+    title="Confirmar eliminación"
+    [open]="deleteModalOpen"
+    (openChange)="onDeleteModalChange($event)"
+  >
+    <p class="admin-confirm-text">¿Eliminar el producto <strong>{{ pendingDelete.name }}</strong>?</p>
+    <div class="admin-form__actions">
+      <button type="button" class="admin-btn" (click)="onDeleteModalChange(false)">Cancelar</button>
+      <button type="button" class="admin-btn admin-btn--danger" (click)="executeDelete()">Eliminar</button>
+    </div>
+  </app-admin-modal>
+}

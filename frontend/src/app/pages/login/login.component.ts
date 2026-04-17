@@ -30,7 +30,7 @@ export class LoginComponent {
 
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
-        localStorage.setItem('token', res.token);
+        this.authService.saveSession(res.token, res.user);
         this.router.navigate(['/']);
       },
       error: () => this.errorMsg = 'Credenciales incorrectas. Intenta de nuevo.'

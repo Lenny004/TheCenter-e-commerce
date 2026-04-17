@@ -1,35 +1,86 @@
+// ============================================================================
+// The Center — Administración de pedidos
+// ============================================================================
+
 import { Component, OnInit } from '@angular/core';
 import { CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Order, OrderStatus } from '../../../models';
 import { OrderService } from '../../../services/order.service';
+import { AdminModalComponent } from '../../../components/admin-modal/admin-modal.component';
 
 @Component({
   selector: 'app-admin-orders',
   standalone: true,
-  imports: [CurrencyPipe, TitleCasePipe, FormsModule],
+  imports: [CurrencyPipe, TitleCasePipe, FormsModule, AdminModalComponent],
   templateUrl: './admin-orders.component.html',
   styleUrl: './admin-orders.component.css'
 })
 export class AdminOrdersComponent implements OnInit {
   orders: Order[] = [];
   statuses: OrderStatus[] = ['pendiente', 'procesando', 'enviada', 'entregada', 'cancelada'];
+
+  modalOpen = false;
+  selected: Order | null = null;
+  formStatus: OrderStatus = 'pendiente';
   expandedOrderId: number | null = null;
+
+  feedback: string | null = null;
+  errorMsg: string | null = null;
+  saving = false;
 
   constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
-    this.orderService.getOrders().subscribe(o => this.orders = o);
+    this.load();
+  }
+
+  load(): void {
+    this.orderService.getOrders().subscribe({
+      next: (rows) => (this.orders = rows),
+      error: (err) => this.setError(err)
+    });
+  }
+
+  openEdit(order: Order): void {
+    this.selected = order;
+    this.formStatus = order.status;
+    this.clearMessages();
+    this.modalOpen = true;
+  }
+
+  closeModal(): void {
+    this.modalOpen = false;
+    this.selected = null;
+  }
+
+  onOrderModalOpen(open: boolean): void {
+    this.modalOpen = open;
+    if (!open) this.selected = null;
+  }
+
+  saveStatus(): void {
+    if (!this.selected) return;
+    this.saving = true;
+    this.clearMessages();
+    this.orderService.updateOrderStatus(this.selected.id, this.formStatus).subscribe({
+      next: (updated) => {
+        this.saving = false;
+        const idx = this.orders.findIndex((o) => o.id === updated.id);
+        if (idx >= 0) this.orders[idx] = updated;
+        this.feedback = 'Estado del pedido actualizado.';
+        this.modalOpen = false;
+        this.selected = null;
+      },
+      error: (err) => {
+        this.saving = false;
+        this.setError(err);
+      }
+    });
   }
 
   toggleDetails(orderId: number): void {
     this.expandedOrderId = this.expandedOrderId === orderId ? null : orderId;
-  }
-
-  updateStatus(order: Order, newStatus: OrderStatus): void {
-    this.orderService.updateOrderStatus(order.id, newStatus).subscribe(updated => {
-      order.status = updated.status;
-    });
   }
 
   getStatusClass(status: OrderStatus): string {
@@ -41,5 +92,18 @@ export class AdminOrdersComponent implements OnInit {
       cancelada: 'ao-status--cancelled'
     };
     return map[status] || '';
+  }
+
+  private clearMessages(): void {
+    this.feedback = null;
+    this.errorMsg = null;
+  }
+
+  private setError(err: unknown): void {
+    const msg =
+      err && typeof err === 'object' && err !== null && 'error' in err
+        ? (err as { error?: { error?: string } }).error?.error
+        : null;
+    this.errorMsg = msg || 'No se pudo cargar los pedidos.';
   }
 }

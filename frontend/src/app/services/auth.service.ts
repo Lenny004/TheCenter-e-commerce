@@ -1,39 +1,77 @@
+// ============================================================================
+// The Center — Autenticación y sesión
+// ============================================================================
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User, UserRole } from '../models';
+
+const API = '/api/auth';
+
+interface RegisterPayload {
+  name: string;
+  email: string;
+  password: string;
+  phone?: string;
+  rol?: UserRole;
+}
+
+export interface UserSession {
+  id: number;
+  name: string;
+  email: string;
+  rol: UserRole;
+}
+
+interface LoginResponse {
+  token: string;
+  user: UserSession;
+}
+
+const USER_KEY = 'user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private currentUser$ = new BehaviorSubject<User | null>(null);
-
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<{ token: string; user: User }> {
-    // TODO: POST /api/auth/login
-    const mockUser: User = { id: 1, name: 'Adrián', phone: '+503 7890-1234', email, rol: 'cliente' };
-    return of({ token: 'mock-jwt-token', user: mockUser });
+  register(data: RegisterPayload): Observable<unknown> {
+    return this.http.post(`${API}/register`, data);
   }
 
-  register(data: { name: string; email: string; phone?: string; password: string; rol: UserRole }): Observable<User> {
-    // TODO: POST /api/auth/register
-    return of({ id: Date.now(), name: data.name, email: data.email, phone: data.phone || null, rol: data.rol });
+  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${API}/login`, { email, password });
   }
 
-  logout(): void {
-    this.currentUser$.next(null);
-    localStorage.removeItem('token');
-  }
-
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
-  }
-
-  getUser(): Observable<User | null> {
-    return this.currentUser$.asObservable();
+  saveSession(token: string, user: UserSession): void {
+    localStorage.setItem('token', token);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  getUser(): UserSession | null {
+    const raw = localStorage.getItem(USER_KEY);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw) as UserSession;
+    } catch {
+      return null;
+    }
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem(USER_KEY);
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
+  isAdmin(): boolean {
+    return this.getUser()?.rol === 'admin';
   }
 }

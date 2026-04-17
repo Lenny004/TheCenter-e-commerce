@@ -1,10 +1,7 @@
-.admin-orders {
-  padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-2xl);
-}
-
-.admin-orders h1 {
-  color: var(--black);
-  margin-bottom: var(--spacing-xl);
+.ao-modal-meta {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--spacing-lg);
 }
 
 /* ── Table ───────────────────────────────────────────────────── */
