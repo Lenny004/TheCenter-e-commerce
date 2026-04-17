@@ -5,16 +5,19 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './guards/admin.guard';
 import { adminOnlyGuard } from './guards/admin-only.guard';
+import { redirectToFirstAdminRegisterGuard } from './guards/first-setup.guard';
 
 export const routes: Routes = [
   {
     path: '',
+    canActivate: [redirectToFirstAdminRegisterGuard],
     loadComponent: () =>
       import('./pages/home/home.component').then(m => m.HomeComponent),
     title: 'The Center — Dashboard'
   },
   {
     path: 'dashboard',
+    canActivate: [redirectToFirstAdminRegisterGuard],
     loadComponent: () =>
       import('./pages/home/home.component').then(m => m.HomeComponent),
     title: 'The Center — Dashboard'
@@ -44,6 +47,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
+    canActivate: [redirectToFirstAdminRegisterGuard],
     loadComponent: () =>
       import('./pages/login/login.component').then(m => m.LoginComponent),
     title: 'The Center — Iniciar Sesión'

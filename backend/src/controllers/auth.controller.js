@@ -25,6 +25,7 @@ function userTypeFromRol(rol) {
  * Indica si la base está sin usuarios: el primer registro debe ser administrador.
  */
 export async function setupStatus(_req, res) {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
     const count = await prisma.user.count();
     res.json({ needsAdminSetup: count === 0 });
 }

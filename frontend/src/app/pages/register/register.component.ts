@@ -40,6 +40,9 @@ export class RegisterComponent implements OnInit {
       .subscribe({
         next: (s) => {
           this.needsAdminSetup = s.needsAdminSetup;
+          if (s.needsAdminSetup) {
+            this.rol = 'admin';
+          }
           this.setupResolved = true;
           if (!s.needsAdminSetup && this.route.snapshot.queryParamMap.get('setup') === '1') {
             this.router.navigate(['/registro'], { replaceUrl: true });

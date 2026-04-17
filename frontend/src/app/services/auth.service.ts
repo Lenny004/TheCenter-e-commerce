@@ -3,9 +3,10 @@
 // ============================================================================
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, catchError } from 'rxjs';
 import { UserRole } from '../models';
+import { environment } from '../../environments/environment';
 
 const API = '/api/auth';
 
@@ -61,17 +62,46 @@ export function normalizeSessionUser(
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  /** Sin autenticación: indica si hace falta crear el primer usuario como administrador. */
+  private directAuthUrl(path: string): string | null {
+    const direct = environment.apiDirectBase?.trim();
+    if (!direct) return null;
+    return `${direct.replace(/\/$/, '')}/api/auth/${path}`;
+  }
+
+  /** POST a /api/auth/... con reintento al backend directo si falla el proxy. */
+  private authPostWithFallback<T>(path: string, body: unknown): Observable<T> {
+    const primary$ = this.http.post<T>(`${API}/${path}`, body);
+    const fb = this.directAuthUrl(path);
+    if (!fb) return primary$;
+    return primary$.pipe(catchError(() => this.http.post<T>(fb, body)));
+  }
+
+  /**
+   * Sin autenticación: indica si hace falta crear el primer usuario como administrador.
+   * Reintenta contra `environment.apiDirectBase` si `/api` no responde (proxy no configurado).
+   */
   getSetupStatus(): Observable<SetupStatusResponse> {
-    return this.http.get<SetupStatusResponse>(`${API}/setup-status`);
+    const params = new HttpParams().set('_t', String(Date.now()));
+    const opts = {
+      params,
+      headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' }
+    };
+    const primary$ = this.http.get<SetupStatusResponse>(`${API}/setup-status`, opts);
+    const fb = this.directAuthUrl('setup-status');
+    if (!fb) {
+      return primary$;
+    }
+    return primary$.pipe(
+      catchError(() => this.http.get<SetupStatusResponse>(fb, opts))
+    );
   }
 
   register(data: RegisterPayload): Observable<unknown> {
-    return this.http.post(`${API}/register`, data);
+    return this.authPostWithFallback<unknown>('register', data);
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${API}/login`, { email, password });
+    return this.authPostWithFallback<LoginResponse>('login', { email, password });
   }
 
   saveSession(token: string, user: UserSession): void {
