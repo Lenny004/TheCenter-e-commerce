@@ -9,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 import { AuthService, normalizeSessionUser, UserSession } from '../../services/auth.service';
 
 @Component({
@@ -21,9 +22,18 @@ import { AuthService, normalizeSessionUser, UserSession } from '../../services/a
 export class LoginComponent implements OnInit {
   email = '';
   password = '';
-  errorMsg = '';
-  successMsg = '';
   submitting = false;
+
+  private readonly toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3200,
+    timerProgressBar: true,
+    customClass: {
+      popup: 'app-toast'
+    }
+  });
 
   constructor(
     private authService: AuthService,
@@ -33,21 +43,18 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.route.snapshot.queryParamMap.get('registro') === 'ok') {
-      this.successMsg = 'Cuenta creada. Inicia sesión con tu correo y contraseña.';
+      this.showToast('success', 'Cuenta creada. Inicia sesión con tu correo y contraseña.');
     }
     if (this.route.snapshot.queryParamMap.get('setup') === 'ok') {
-      this.successMsg = 'Cuenta de administrador creada. Inicia sesión para continuar.';
+      this.showToast('success', 'Cuenta de administrador creada. Inicia sesión para continuar.');
     }
   }
 
   onSubmit(): void {
-    this.errorMsg = '';
-    this.successMsg = '';
-
     const email = this.email.trim();
     const password = this.password;
     if (!email || !password) {
-      this.errorMsg = 'Por favor completa todos los campos.';
+      this.showToast('error', 'Por favor completa todos los campos.');
       return;
     }
 
@@ -63,7 +70,17 @@ export class LoginComponent implements OnInit {
       error: (err: HttpErrorResponse) => {
         this.submitting = false;
         const body = err.error as { error?: string } | undefined;
-        this.errorMsg = body?.error ?? 'Credenciales incorrectas. Intenta de nuevo.';
+        this.showToast('error', body?.error ?? 'Credenciales incorrectas. Intenta de nuevo.');
+      }
+    });
+  }
+
+  private showToast(icon: 'success' | 'error' | 'warning' | 'info', title: string): void {
+    this.toast.fire({
+      icon,
+      title,
+      customClass: {
+        popup: `app-toast app-toast--${icon}`
       }
     });
   }

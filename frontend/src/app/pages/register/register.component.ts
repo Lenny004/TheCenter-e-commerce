@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 import { take } from 'rxjs';
 import { UserRole } from '../../models';
 import { AuthService, normalizeSessionUser } from '../../services/auth.service';
@@ -24,8 +25,18 @@ export class RegisterComponent implements OnInit {
   needsAdminSetup = false;
   /** Evita mostrar el selector de rol antes de saber si es el primer uso. */
   setupResolved = false;
-  errorMsg = '';
   submitting = false;
+
+  private readonly toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3200,
+    timerProgressBar: true,
+    customClass: {
+      popup: 'app-toast'
+    }
+  });
 
   constructor(
     private authService: AuthService,
@@ -56,26 +67,24 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.errorMsg = '';
-
     const name = this.name.trim();
     const email = this.email.trim().toLowerCase();
     const phone = this.phone.trim();
 
     if (!name || !email || !this.password) {
-      this.errorMsg = 'Los campos obligatorios deben completarse.';
+      this.showToast('error', 'Los campos obligatorios deben completarse.');
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      this.errorMsg = 'Introduce un correo electrónico válido.';
+      this.showToast('error', 'Introduce un correo electrónico valido.');
       return;
     }
     if (this.password.length < 8) {
-      this.errorMsg = 'La contraseña debe tener al menos 8 caracteres.';
+      this.showToast('error', 'La contrasena debe tener al menos 8 caracteres.');
       return;
     }
     if (this.password !== this.confirmPassword) {
-      this.errorMsg = 'Las contraseñas no coinciden.';
+      this.showToast('error', 'Las contrasenas no coinciden.');
       return;
     }
 
@@ -96,9 +105,11 @@ export class RegisterComponent implements OnInit {
             error: (err: HttpErrorResponse) => {
               this.submitting = false;
               const body = err.error as { error?: string } | undefined;
-              this.errorMsg =
+              this.showToast(
+                'warning',
                 body?.error ??
-                'Cuenta creada, pero no se pudo iniciar sesión automáticamente. Entra en Iniciar sesión.';
+                  'Cuenta creada, pero no se pudo iniciar sesion automaticamente. Entra en Iniciar sesion.'
+              );
             }
           });
         } else {
@@ -109,7 +120,17 @@ export class RegisterComponent implements OnInit {
       error: (err: HttpErrorResponse) => {
         this.submitting = false;
         const body = err.error as { error?: string } | undefined;
-        this.errorMsg = body?.error ?? 'No se pudo crear la cuenta.';
+        this.showToast('error', body?.error ?? 'No se pudo crear la cuenta.');
+      }
+    });
+  }
+
+  private showToast(icon: 'success' | 'error' | 'warning' | 'info', title: string): void {
+    this.toast.fire({
+      icon,
+      title,
+      customClass: {
+        popup: `app-toast app-toast--${icon}`
       }
     });
   }

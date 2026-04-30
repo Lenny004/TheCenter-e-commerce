@@ -6,55 +6,47 @@
   <div class="header__inner container">
     <div class="header__brand">
       <a routerLink="/" class="header__logo-link" aria-label="The Center — Inicio">
-        <img class="header__logo-img" src="assets/brand-location.svg" alt="" width="40" height="40" />
+        <img class="header__logo-img" src="assets/logo.png" alt="" width="40" height="40" />
       </a>
       <a routerLink="/" class="header__sitename">The Center</a>
     </div>
 
     <nav class="header__nav" aria-label="Navegación principal">
-      <a
-        routerLink="/"
-        routerLinkActive="header__link--active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="header__link"
-      >
+      <a routerLink="/" routerLinkActive="header__link--active" [routerLinkActiveOptions]="{ exact: true }"
+        class="header__link">
         Inicio
       </a>
 
       @if (showCartInHeader()) {
-        <a routerLink="/carrito" routerLinkActive="header__link--active" class="header__link header__link--with-icon">
-          <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-          <span class="header__link-label">Carrito</span>
-        </a>
+      <a routerLink="/carrito" routerLinkActive="header__link--active" class="header__link header__link--with-icon">
+        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+        <span class="header__link-label">Carrito</span>
+      </a>
       }
 
       @if (showPrivateAreaLink()) {
-        <a
-          routerLink="/admin"
-          routerLinkActive="header__link--active"
-          [routerLinkActiveOptions]="{ exact: false }"
-          class="header__link header__link--panel"
-        >
-          <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
-          <span class="header__link-label">{{ privateAreaNavLabel() }}</span>
-        </a>
+      <a routerLink="/admin" routerLinkActive="header__link--active" [routerLinkActiveOptions]="{ exact: false }"
+        class="header__link header__link--panel">
+        <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
+        <span class="header__link-label">{{ privateAreaNavLabel() }}</span>
+      </a>
       }
 
       @if (showProfileLink()) {
-        <a routerLink="/perfil" routerLinkActive="header__link--active" class="header__link header__link--with-icon">
-          <span class="material-symbols-outlined" aria-hidden="true">person</span>
-          <span class="header__link-label">Perfil</span>
-        </a>
+      <a routerLink="/perfil" routerLinkActive="header__link--active" class="header__link header__link--with-icon">
+        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+        <span class="header__link-label">Perfil</span>
+      </a>
       }
 
       @if (auth.isLoggedIn()) {
-        <button type="button" class="header__logout" (click)="logout()" aria-label="Cerrar sesión">
-          <span class="material-symbols-outlined" aria-hidden="true">logout</span>
-          <span class="header__link-label">Salir</span>
-        </button>
+      <button type="button" class="header__logout" (click)="logout()" aria-label="Cerrar sesión">
+        <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+        <span class="header__link-label">Salir</span>
+      </button>
       } @else {
-        <a routerLink="/login" routerLinkActive="header__link--active" class="header__link">Entrar</a>
-        <a routerLink="/registro" class="header__cta">Crear cuenta</a>
+      <a routerLink="/login" routerLinkActive="header__link--active" class="header__link">Entrar</a>
+      <a routerLink="/registro" class="header__cta">Crear cuenta</a>
       }
     </nav>
   </div>

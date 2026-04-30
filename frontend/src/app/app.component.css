@@ -105,7 +105,7 @@
   background: rgba(255, 255, 255, 0.18);
 }
 
-.header__link--with-icon .material-symbols-outlined {
+.header__link--with-icon .app-icon {
   font-size: 1.25rem;
   opacity: 0.95;
 }
@@ -168,7 +168,7 @@
   color: var(--color-surface);
 }
 
-.header__logout .material-symbols-outlined {
+.header__logout .app-icon {
   font-size: 1.125rem;
 }
 
