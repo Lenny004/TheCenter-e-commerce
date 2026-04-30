@@ -1,77 +1,78 @@
 <section class="contact-page container">
-  <header class="contact-page__header">
-    <p class="legal-page__eyebrow">Contáctanos</p>
-    <h1>Estamos para ayudarte</h1>
-    <p class="legal-page__lead">
-      Comparte tu consulta y un asesor te responderá. Este formulario es demostrativo y no envía datos reales.
-    </p>
-  </header>
-
-  <div class="contact-page__grid">
-    <div>
-      <div class="contact-card">
-        <h2>Canales de contacto</h2>
-        <div class="contact-list">
-          <div>
-            <strong>Correo</strong>
-            <span>hola&#64;thecenter.com</span>
-          </div>
-          <div>
-            <strong>Teléfono</strong>
-            <span>+503 7890-1234</span>
-          </div>
-          <div>
-            <strong>Horario</strong>
-            <span>Lun - Sab | 9:00 a 19:00</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-card">
-        <h2>Dirección</h2>
-        <div class="contact-list">
-          <div>
-            <strong>Showroom</strong>
-            <span>Colonia Escalón, San Salvador</span>
-          </div>
-          <div>
-            <strong>Entrega local</strong>
-            <span>Disponible en el área metropolitana</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <h2>Formulario de contacto</h2>
-      <form class="contact-form" aria-describedby="contact-form-note" (submit)="$event.preventDefault()">
-        <div class="contact-form__group">
-          <label for="contact-name">Nombre completo</label>
-          <input id="contact-name" name="name" type="text" placeholder="Tu nombre" />
-        </div>
-        <div class="contact-form__group">
-          <label for="contact-email">Correo electrónico</label>
-          <input id="contact-email" name="email" type="email" placeholder="tu&#64;email.com" />
-        </div>
-        <div class="contact-form__group">
-          <label for="contact-order">Número de pedido (opcional)</label>
-          <input id="contact-order" name="order" type="text" placeholder="#TC-0000" />
-        </div>
-        <div class="contact-form__group">
-          <label for="contact-message">Mensaje</label>
-          <textarea id="contact-message" name="message" placeholder="Cuéntanos cómo podemos ayudarte"></textarea>
-        </div>
-        <p id="contact-form-note" class="contact-form__note">
-          Este formulario es demostrativo y no envía mensajes a ningún servidor.
+    <header class="contact-page__header">
+        <p class="legal-page__eyebrow">Contáctanos</p>
+        <h1>Estamos para ayudarte</h1>
+        <p class="legal-page__lead">
+            Comparte tu consulta y un asesor te responderá. Este formulario es demostrativo y no envía datos reales.
         </p>
-        <button type="submit" class="contact-form__submit" disabled>Enviar mensaje</button>
-      </form>
-    </div>
-  </div>
+    </header>
 
-  <div class="contact-page__actions">
-    <a routerLink="/terminos" class="legal-btn">Términos</a>
-    <a routerLink="/privacidad" class="legal-btn">Privacidad</a>
-    <a routerLink="/restricciones" class="legal-btn">Restricciones</a>
-  </div>
+    <div class="contact-page__grid">
+        <div>
+            <div class="contact-card">
+                <h2>Canales de contacto</h2>
+                <div class="contact-list">
+                    <div>
+                        <strong>Correo</strong>
+                        <span>hola&#64;thecenter.com</span>
+                    </div>
+                    <div>
+                        <strong>Teléfono</strong>
+                        <span>+503 7890-1234</span>
+                    </div>
+                    <div>
+                        <strong>Horario</strong>
+                        <span>Lun - Sab | 9:00 a 19:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-card">
+                <h2>Dirección</h2>
+                <div class="contact-list">
+                    <div>
+                        <strong>Showroom</strong>
+                        <span>Colonia Escalón, San Salvador</span>
+                    </div>
+                    <div>
+                        <strong>Entrega local</strong>
+                        <span>Disponible en el área metropolitana</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <h2>Formulario de contacto</h2>
+            <form class="contact-form" aria-describedby="contact-form-note" (submit)="$event.preventDefault()">
+                <div class="contact-form__group">
+                    <label for="contact-name">Nombre completo</label>
+                    <input id="contact-name" name="name" type="text" placeholder="Tu nombre" />
+                </div>
+                <div class="contact-form__group">
+                    <label for="contact-email">Correo electrónico</label>
+                    <input id="contact-email" name="email" type="email" placeholder="tu&#64;email.com" />
+                </div>
+                <div class="contact-form__group">
+                    <label for="contact-order">Número de pedido (opcional)</label>
+                    <input id="contact-order" name="order" type="text" placeholder="#TC-0000" />
+                </div>
+                <div class="contact-form__group">
+                    <label for="contact-message">Mensaje</label>
+                    <textarea id="contact-message" name="message"
+                        placeholder="Cuéntanos cómo podemos ayudarte"></textarea>
+                </div>
+                <p id="contact-form-note" class="contact-form__note">
+                    Este formulario es demostrativo y no envía mensajes a ningún servidor.
+                </p>
+                <button type="submit" class="contact-form__submit" disabled>Enviar mensaje</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="contact-page__actions">
+        <a routerLink="/terminos" class="legal-btn">Términos</a>
+        <a routerLink="/privacidad" class="legal-btn">Privacidad</a>
+        <a routerLink="/restricciones" class="legal-btn">Restricciones</a>
+    </div>
 </section>
