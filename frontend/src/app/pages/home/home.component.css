@@ -125,7 +125,7 @@
   justify-content: center;
 }
 
-.dashboard-card__no-img .material-symbols-outlined {
+.dashboard-card__no-img .app-icon {
   font-size: 3rem;
   color: var(--color-border);
 }

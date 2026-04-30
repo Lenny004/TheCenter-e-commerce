@@ -59,6 +59,30 @@ export const routes: Routes = [
     title: 'The Center — Registro'
   },
   {
+    path: 'terminos',
+    loadComponent: () =>
+      import('./pages/terms/terms.component').then(m => m.TermsComponent),
+    title: 'The Center — Términos y condiciones'
+  },
+  {
+    path: 'privacidad',
+    loadComponent: () =>
+      import('./pages/privacy/privacy.component').then(m => m.PrivacyComponent),
+    title: 'The Center — Política de privacidad'
+  },
+  {
+    path: 'restricciones',
+    loadComponent: () =>
+      import('./pages/restrictions/restrictions.component').then(m => m.RestrictionsComponent),
+    title: 'The Center — Restricciones de uso'
+  },
+  {
+    path: 'contacto',
+    loadComponent: () =>
+      import('./pages/contact/contact.component').then(m => m.ContactComponent),
+    title: 'The Center — Contáctanos'
+  },
+  {
     path: 'admin',
     loadComponent: () =>
       import('./pages/admin/admin-shell/admin-shell.component').then(m => m.AdminShellComponent),

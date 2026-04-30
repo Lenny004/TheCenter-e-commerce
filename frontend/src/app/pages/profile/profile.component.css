@@ -40,7 +40,7 @@
   flex-shrink: 0;
 }
 
-.profile__avatar .material-symbols-outlined {
+.profile__avatar .app-icon {
   font-size: 2rem;
   color: var(--color-primary);
 }
@@ -106,7 +106,7 @@
   transition: all var(--transition-fast);
 }
 
-.profile-btn .material-symbols-outlined {
+.profile-btn .app-icon {
   font-size: 1.125rem;
 }
 

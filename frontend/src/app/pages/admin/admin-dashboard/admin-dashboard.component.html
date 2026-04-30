@@ -1,5 +1,8 @@
 <section class="admin-dashboard container">
-  <h1>{{ auth.isVendor() ? 'Panel vendedor' : 'Panel de administración' }}</h1>
+  <div class="admin-dashboard__header">
+    <img class="admin-dashboard__logo" src="/logo.png" alt="The Center" />
+    <h1>{{ auth.isVendor() ? 'Panel vendedor' : 'Panel de administración' }}</h1>
+  </div>
 
   @if (errorMsg) {
     <p class="admin-feedback admin-feedback--error">{{ errorMsg }}</p>

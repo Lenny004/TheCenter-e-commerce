@@ -2,9 +2,22 @@
   padding: 0;
 }
 
+.admin-dashboard__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.admin-dashboard__logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
 .admin-dashboard h1 {
   color: var(--black);
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: 0;
 }
 
 .admin-dashboard__metrics {
@@ -84,6 +97,16 @@
 }
 
 @media (max-width: 768px) {
+  .admin-dashboard__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-dashboard__logo {
+    width: 48px;
+    height: 48px;
+  }
+
   .admin-dashboard__metrics {
     grid-template-columns: repeat(2, 1fr);
   }
