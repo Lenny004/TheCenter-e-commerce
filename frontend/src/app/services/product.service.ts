@@ -31,20 +31,25 @@ export interface ProductWritePayload {
 export class ProductService {
   constructor(private http: HttpClient) {}
 
-  resolveImageUrl(image: string | null | undefined): string | null {
+  resolveImageUrl(image: string | null | undefined): string {
     const raw = String(image ?? '').trim();
-    if (!raw) return null;
+    
+    // 1. Si el producto no tiene foto, devolvemos tu logo por defecto
+    if (!raw) return 'assets/logo.png'; 
 
-    // Normaliza rutas guardadas en Windows (\) para que el navegador las entienda.
+    // Normaliza rutas guardadas en Windows (\)
     const normalized = raw.replace(/\\/g, '/');
 
+    // Si ya es un enlace completo, lo deja pasar
     if (/^https?:\/\//i.test(normalized) || normalized.startsWith('data:') || normalized.startsWith('blob:')) {
       return normalized;
     }
 
-    const directBase = String(environment.apiDirectBase || '').replace(/\/+$/, '');
+    // 2. Aquí forzamos de manera limpia la URL de tu backend
+    const directBase = 'http://localhost:5000'; 
     const path = normalized.startsWith('/') ? normalized : `/${normalized}`;
-    return directBase ? `${directBase}${path}` : path;
+    
+    return `${directBase}${path}`;
   }
 
   getProducts(): Observable<Product[]> {

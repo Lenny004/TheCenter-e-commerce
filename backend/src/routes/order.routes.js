@@ -14,5 +14,6 @@ router.get('/', verifyToken, authorize('admin', 'vendedor'), wrap(orderControlle
 router.get('/:id', verifyToken, authorize('admin', 'vendedor'), wrap(orderController.getById));
 router.put('/:id', verifyToken, authorize('admin', 'vendedor'), wrap(orderController.update));
 router.delete('/:id', verifyToken, authorize('admin'), wrap(orderController.remove));
+router.post('/checkout', orderController.checkout);
 
 export default router;

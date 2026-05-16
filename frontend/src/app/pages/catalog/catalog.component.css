@@ -105,3 +105,43 @@
     align-items: flex-start;
   }
 }
+
+/* --- ESTILOS AGREGADOS PARA LA VITRINA DINÁMICA --- */
+
+/* Separación extra para el título de género */
+.catalog__filters-subtitle {
+  margin-top: 1rem;
+}
+
+/* Formato para que todas las fotos de la ropa se vean del mismo tamaño */
+.catalog__product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+/* Contenedor de los botones de la tarjeta */
+.catalog__card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* Para que los botones midan exactamente la mitad cada uno */
+.catalog-btn--half {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Mensaje cuando no hay productos que coincidan con el filtro */
+.catalog__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}

@@ -39,7 +39,7 @@
             <td>{{ product.id }}</td>
             <td>
               @if (product.image) {
-                <img [src]="imageUrl(product.image)" [alt]="product.name" class="ap-table__img" />
+                <img [src]="'http://localhost:5000' + product.image" [alt]="product.name" class="ap-table__img" />
               } @else {
                 <span class="material-symbols-outlined ap-table__no-img">image</span>
               }

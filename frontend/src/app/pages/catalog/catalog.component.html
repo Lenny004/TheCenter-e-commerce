@@ -8,34 +8,45 @@
   </header>
 
   <aside class="catalog__filters">
-    <h3>Filtros</h3>
+    <h3>Categorías</h3>
     <div class="catalog__chips">
-      <button type="button">Zapatillas</button>
-      <button type="button">Accesorios</button>
-      <button type="button">Oferta flash</button>
-      <button type="button">Más vendidos</button>
+      <button type="button" [class.active]="selectedCategory === null" (click)="setCategoryFilter(null)">Todas</button>
+      @for (cat of categories; track cat.id) {
+        <button type="button" [class.active]="selectedCategory === cat.id" (click)="setCategoryFilter(cat.id)">
+          {{ cat.name }}
+        </button>
+      }
+    </div>
+
+    <h3 class="catalog__filters-subtitle">Género</h3>
+    <div class="catalog__chips">
+      <button type="button" [class.active]="selectedGender === null" (click)="setGenderFilter(null)">Todos</button>
+      @for (g of genders; track g) {
+        <button type="button" [class.active]="selectedGender === g" (click)="setGenderFilter(g)">
+          {{ g | titlecase }}
+        </button>
+      }
     </div>
   </aside>
 
   <div class="catalog__grid">
-    <article class="catalog__card">
-      <img class="catalog__brand-logo" src="assets/brand-location.svg" alt="Logo de marca">
-      <h3>Zapatillas Swift Glide</h3>
-      <p class="catalog__price">89,99 $</p>
-      <a routerLink="/carrito" class="catalog-btn catalog-btn--primary">Añadir al carrito</a>
-    </article>
-    <article class="catalog__card">
-      <img class="catalog__brand-logo" src="assets/brand-location.svg" alt="Logo de marca">
-      <h3>Reloj Aura</h3>
-      <p class="catalog__price">159,00 $</p>
-      <a routerLink="/carrito" class="catalog-btn catalog-btn--primary">Añadir al carrito</a>
-    </article>
-    <article class="catalog__card">
-      <img class="catalog__brand-logo" src="assets/brand-location.svg" alt="Logo de marca">
-      <h3>PureAudio Elite</h3>
-      <p class="catalog__price">299,99 $</p>
-      <a routerLink="/carrito" class="catalog-btn catalog-btn--primary">Añadir al carrito</a>
-    </article>
+    @for (product of filteredProducts; track product.id) {
+      <article class="catalog__card">
+        <img class="catalog__product-img" [src]="getImageUrl(product.image)" [alt]="product.name">
+        
+        <h3>{{ product.name }}</h3>
+        <p class="catalog__price">{{ product.price | currency:'USD' }}</p>
+        
+        <div class="catalog__card-actions">
+          <a [routerLink]="['/producto', product.id]" class="catalog-btn catalog-btn--half">Ver detalle</a>
+          <button type="button" class="catalog-btn catalog-btn--primary catalog-btn--half">Al carrito</button>
+        </div>
+      </article>
+    } @empty {
+      <div class="catalog__empty">
+        <h3>No hay productos que coincidan con tu búsqueda.</h3>
+      </div>
+    }
   </div>
 
   <a routerLink="/perfil" class="catalog__profile-link">Ir a perfil</a>

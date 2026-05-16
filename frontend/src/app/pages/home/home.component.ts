@@ -16,6 +16,9 @@ export class HomeComponent implements OnInit {
   categories: Category[] = [];
   activeCategory = 0;
 
+  // 1. Definimos la URL base del backend de forma limpia y como constante
+  private readonly API_URL = 'http://localhost:5000';
+
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
@@ -32,7 +35,13 @@ export class HomeComponent implements OnInit {
     this.activeCategory = id;
   }
 
-  imageUrl(image: string | null | undefined): string | null {
-    return this.productService.resolveImageUrl(image);
+  // 2. Resolvemos la imagen localmente usando nuestra constante
+  resolveImageUrl(image: string | null | undefined): string {
+    if (!image) {
+      // Imagen por defecto si el producto no tiene foto
+      return 'assets/logo.png'; 
+    }
+    // Concatenamos limpiamente la API con la ruta de la imagen
+    return `${this.API_URL}${image}`;
   }
 }

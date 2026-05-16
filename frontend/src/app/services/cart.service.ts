@@ -1,19 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, BehaviorSubject, tap } from 'rxjs';
 import { CartItem, Product } from '../models';
 
 const STORAGE_KEY = 'the-center-cart';
 const USER_ID = 1;
+const API_URL = 'http://localhost:5000/api';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private items: CartItem[] = this.readStoredCart();
   private cartCount$ = new BehaviorSubject<number>(this.calculateCount(this.items));
 
+  constructor(private http: HttpClient) {}
+
+  // --- MÉTODOS LOCALES RECUPERADOS ---
   private readStoredCart(): CartItem[] {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-
     try {
       const parsed = JSON.parse(raw) as CartItem[];
       return Array.isArray(parsed) ? parsed : [];
@@ -74,12 +78,22 @@ export class CartService {
     return of(undefined);
   }
 
-  checkout(): Observable<{ orderId: number }> {
-    this.persistCart([]);
-    return of({ orderId: Date.now() });
-  }
-
   getCartCount(): Observable<number> {
     return this.cartCount$.asObservable();
+  }
+
+  // --- EL NUEVO CHECKOUT CONECTADO AL BACKEND ---
+  checkout(): Observable<any> {
+    const payload = {
+      address: 'Dirección de prueba',
+      contact: 'Contacto de prueba',
+      items: this.items
+    };
+
+    return this.http.post(`${API_URL}/orders/checkout`, payload).pipe(
+      tap(() => {
+        this.persistCart([]);
+      })
+    );
   }
 }

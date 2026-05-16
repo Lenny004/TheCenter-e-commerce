@@ -57,8 +57,16 @@ export class CartComponent implements OnInit {
   }
 
   checkout(): void {
-    this.cartService.checkout().subscribe(res => {
-      alert(`Pedido #${res.orderId} creado exitosamente`);
+    this.cartService.checkout().subscribe({
+      next: (res: any) => {
+        // Alerta bonita si todo sale bien
+        alert(`¡Éxito! ${res.message}. Tu orden oficial es: ${res.orderNumber}`);
+        this.items = []; // Limpiamos la vista
+      },
+      error: (err) => {
+        // Alerta roja si te pasas del stock
+        alert(`Error en la compra: ${err.error.error}`);
+      }
     });
   }
 
